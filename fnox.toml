@@ -1,0 +1,9 @@
+default_provider = "onepass"
+
+[providers.onepass]
+type = "1password"
+vault = "Personal"
+
+[providers.age]
+type = "age"
+recipients = ["age1..."]

@@ -1,0 +1,130 @@
+[settings]
+experimental = true
+
+[env]
+OP_ACCOUNT = "U2NWAVMUCZHATMVL7WHEOJIDNY"
+FNOX_AGE_KEY = "op://Personal/Age Keys/identity"
+IMAGE_NAME = "{{ config_root | basename }}"
+# development or production; jinja:Containerfile rejects anything else
+MODE = "{{ get_env(name='MODE', default='development') }}"
+HOST_PORT = "62441"
+
+[tools]
+fnox = "latest"
+age = "latest"
+node = "v26"
+hadolint = "latest"
+uv = "latest"
+
+# [tasks."fnox:sync"]
+# description = "Syncs secrets from 1Password to age"
+# sources = ['fnox.toml']
+# outputs = ['fnox.local.toml']
+# run = 'op run -- fnox sync -f --local-file'
+
+[tasks.mode]
+description = "Shows which mode the current environment resolves to"
+run = 'echo "MODE=${MODE:?}  image=${IMAGE_NAME:?}:${MODE:?}"'
+
+# Intentionally no sources: MODE is not a file, so a freshness check cannot
+# see a mode switch. The script writes only when the rendered content differs,
+# which keeps Containerfile's mtime stable so downstream tasks still cache.
+[tasks."jinja:Containerfile"]
+description = "Renders Containerfile from Containerfile.j2 for the current MODE"
+quiet = true
+run = ['''
+#!/usr/bin/env -S uv run --quiet --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["jinja2==3.1.6"]
+# ///
+import os
+import pathlib
+import sys
+
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
+
+MODES = ("development", "production")
+
+mode = os.environ.get("MODE", "development").strip().lower()
+if mode not in MODES:
+    sys.exit(f"jinja:Containerfile: MODE={mode!r} is not one of {MODES}")
+
+root = pathlib.Path(os.environ.get("MISE_PROJECT_ROOT", ".")).resolve()
+env = Environment(
+    loader=FileSystemLoader(root),
+    undefined=StrictUndefined,
+    trim_blocks=True,
+    lstrip_blocks=True,
+    keep_trailing_newline=True,
+)
+rendered = env.get_template("Containerfile.j2").render(mode=mode)
+
+out = root / "Containerfile"
+if out.exists() and out.read_text() == rendered:
+    print(f"Containerfile already current for mode={mode}")
+else:
+    out.write_text(rendered)
+    print(f"Containerfile rendered for mode={mode}")
+''']
+
+[tasks."check:Containerfile"]
+description = "Lints the rendered Containerfile"
+depends = ['jinja:Containerfile']
+sources = ['Containerfile']
+run = 'hadolint Containerfile'
+
+[tasks."npm:lock"]
+description = "Refreshes site/package-lock.json without installing node_modules"
+dir = 'site'
+sources = ['package.json']
+outputs = ['package-lock.json']
+run = 'npm install --package-lock-only'
+
+[tasks."podman:build"]
+description = "Builds the site image for the current MODE"
+alias = 'build'
+depends = ['check:*', 'npm:lock']
+sources = [
+  'Containerfile',
+  '.containerignore',
+  'site/**',
+  '!site/node_modules/**',
+  '!site/dist/**',
+]
+usage = '''
+arg "[tags]" var=#true help="Extra tags; the image is always tagged with the current MODE"
+'''
+run = 'podman build --tag ${IMAGE_NAME:?}:${MODE:?}{% for tag in usage.tags | default(value=[]) %} --tag ${IMAGE_NAME:?}:{{ tag }}{% endfor %} .'
+
+[tasks."podman:start"]
+description = "Runs the site image for the current MODE"
+alias = 'start'
+depends = ['podman:build']
+interactive = true
+run = ['''
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "${MODE:?}" in
+  production) container_port=80 ;;
+  *)          container_port=4321 ;;
+esac
+
+echo "serving ${IMAGE_NAME:?}:${MODE} on http://127.0.0.1:${HOST_PORT:?}"
+exec podman run --rm -ti \
+  --name "${IMAGE_NAME:?}-${MODE}" \
+  --publish "127.0.0.1:${HOST_PORT}:${container_port}" \
+  "localhost/${IMAGE_NAME:?}:${MODE}"
+''']
+
+[tasks."podman:interactive"]
+description = "Opens a shell in the site image for the current MODE"
+alias = 'shell'
+depends = ['podman:build']
+interactive = true
+run = 'podman run --rm -ti --entrypoint bash localhost/${IMAGE_NAME:?}:${MODE:?}'
+
+[tasks.clean]
+description = "Removes generated build artifacts"
+run = 'rm -f Containerfile'
