@@ -14,6 +14,7 @@ fnox = "latest"
 age = "latest"
 node = "v26"
 hadolint = "latest"
+"npm:@astrojs/language-server" = "latest"
 uv = "latest"
 
 # [tasks."fnox:sync"]
@@ -21,6 +22,13 @@ uv = "latest"
 # sources = ['fnox.toml']
 # outputs = ['fnox.local.toml']
 # run = 'op run -- fnox sync -f --local-file'
+
+[tasks.setup]
+description = "Installs node_modules on the host for the language server"
+dir = 'site'
+sources = ['package-lock.json']
+outputs = ['node_modules/.package-lock.json']
+run = ['npm ci --ignore-scripts']
 
 [tasks.mode]
 description = "Shows which mode the current environment resolves to"
@@ -74,17 +82,10 @@ depends = ['jinja:Containerfile']
 sources = ['Containerfile']
 run = 'hadolint Containerfile'
 
-[tasks."npm:lock"]
-description = "Refreshes site/package-lock.json without installing node_modules"
-dir = 'site'
-sources = ['package.json']
-outputs = ['package-lock.json']
-run = 'npm install --package-lock-only'
-
 [tasks."podman:build"]
 description = "Builds the site image for the current MODE"
 alias = 'build'
-depends = ['check:*', 'npm:lock']
+depends = ['setup', 'check:*']
 sources = [
   'Containerfile',
   '.containerignore',
@@ -106,15 +107,27 @@ run = ['''
 #!/usr/bin/env bash
 set -euo pipefail
 
+declare -a extra=()
+
 case "${MODE:?}" in
-  production) container_port=80 ;;
-  *)          container_port=4321 ;;
+  production)
+    container_port=80
+    ;;
+  *)
+    container_port=4321
+    extra+=(
+      --volume "${MISE_PROJECT_ROOT:?}/site:/site:z"
+      --volume "/site/node_modules"
+      --userns "keep-id:uid=1000,gid=1000"
+    )
+    ;;
 esac
 
 echo "serving ${IMAGE_NAME:?}:${MODE} on http://127.0.0.1:${HOST_PORT:?}"
-exec podman run --rm -ti \
+exec podman run --rm -ti --replace \
   --name "${IMAGE_NAME:?}-${MODE}" \
   --publish "127.0.0.1:${HOST_PORT}:${container_port}" \
+  "${extra[@]}" \
   "localhost/${IMAGE_NAME:?}:${MODE}"
 ''']
 

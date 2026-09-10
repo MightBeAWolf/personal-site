@@ -1,3 +1,6 @@
 **/README.md
 **/.git
 **/.gitignore
+site/node_modules
+site/.astro
+site/dist

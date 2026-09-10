@@ -2,6 +2,9 @@
 fnox.local.toml
 *.sha256sum
 
+# Is rendered from Containerfile.j2
+Containerfile
+
 # Logs
 logs
 *.log
