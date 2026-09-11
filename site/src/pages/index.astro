@@ -3,21 +3,30 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const focus = [
   {
-    k: "AI infrastructure",
-    d: "RAG pipelines, autonomous agents, agent sandboxing, and MCP tool integration wired into containerized job orchestration.",
+    k: "Software",
+    d: "System architecture, Python, Rust, esoteric LISP, cross-platform tested and pushed through secure CI/CD Action workflows.",
   },
   {
-    k: "Platform & cloud",
-    d: "Greenfield Kubernetes / K3s buildouts, GitOps with Argo CD, and hybrid cloud + on-premise architecture on Hetzner and Proxmox.",
+    k: "AI",
+    d: "Autonomous agents, agent sandboxing, RAG pipelines, and MCP tool integration wired into containerized job orchestration. Given great power but only under great control.",
   },
   {
-    k: "Security & compliance",
-    d: "NIST 800-171 and CMMC 2.0 programs, cluster hardening, private PKI with step-ca, and Authentik SSO with enforced MFA.",
+    k: "Cloud & On-Prem",
+    d: "Greenfield Kubernetes / K3s buildouts, Maintained as Infrastructure as Code, GitOps with Argo CD, and hybrid cloud + on-premise architecture on Hetzner/AWS/Azure and Proxmox.",
+  },
+  {
+    k: "Security & Compliance",
+    d: "NIST 800-171 and CMMC 2.0 programs, 1Password secret management, cluster hardening, private PKI with step-ca, and Authentik SSO with enforced MFA.",
   },
 ];
 
 const elsewhere = [
   { href: "/resume", label: "Résumé", note: "The full history" },
+  {
+    href: "/tech-stack",
+    label: "Tech stack",
+    note: "Tools, workflows, and what I build with",
+  },
   {
     href: "https://github.com/MightBeAWolf",
     label: "GitHub",
@@ -41,14 +50,14 @@ const elsewhere = [
     <div class="wrap hero__inner">
       <p class="eyebrow">Salish Sea Wolf LLC</p>
       <h1 class="hero__title">
-        I build <span class="hero__accent">high-availability</span> infrastructure
-        for AI and&nbsp;software systems.
+        <span class="hero__accent">Reliable</span> software and&nbsp;
+        infrastructure for start-ups and large enterprises alike.
       </h1>
       <p class="hero__lede">
-        I'm <strong>Thomas G. Wolf</strong> — a software and infrastructure
-        architect in the Greater Seattle Area with 10+ years standing up
-        AI platforms, Kubernetes clusters, and compliant on-premise environments
-        from the ground up.
+        I'm <strong>Thomas G. Wolf</strong>, a software and infrastructure
+        architect in the Greater Seattle Area with 10+ years shipping
+        maintainable software, and standing up virtualization stacks in
+        compliant environments from the ground up.
       </p>
       <div class="hero__actions">
         <a class="button button--primary" href="/resume">View résumé</a>

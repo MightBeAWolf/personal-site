@@ -8,6 +8,7 @@ const isActive = (href: string) =>
 const links = [
   { href: "/", label: "Home" },
   { href: "/resume", label: "Résumé" },
+  { href: "/tech-stack", label: "Tech Stack" },
 ];
 ---
 
@@ -86,7 +87,9 @@ const links = [
   .site-nav {
     display: flex;
     align-items: center;
-    gap: clamp(0.75rem, 2vw, 1.4rem);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem clamp(0.7rem, 2vw, 1.4rem);
   }
 
   .site-nav__link {
