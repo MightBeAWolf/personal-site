@@ -19,4 +19,20 @@ const glossary = defineCollection({
   }),
 });
 
-export const collections = { glossary };
+// The expanded accordion body for each Tools/Workflows row on /tech-stack.
+// `teaser` is the one-liner shown in column 2; the markdown body is the
+// prose that appears in column 3's accordion once it's expanded,
+// cross-referencing glossary terms with the same hand-authored
+// `<button class="glossary-term" ...>` pattern used in
+// src/content/glossary/*.md.
+const practices = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/practices" }),
+  schema: z.object({
+    section: z.enum(["tools", "workflows"]),
+    title: z.string(),
+    teaser: z.string(),
+    order: z.number(),
+  }),
+});
+
+export const collections = { glossary, practices };

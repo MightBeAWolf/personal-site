@@ -28,6 +28,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
 
+    {/* Per-page extras (e.g. a page-specific Google Fonts link) — most
+    pages don't use this, keeping the base font stack system-only. */}
+    <slot name="head" />
+
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />

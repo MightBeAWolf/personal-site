@@ -32,6 +32,13 @@ test.describe("Glossary pages", () => {
 });
 
 test.describe("Glossary popups on /tech-stack", () => {
+  // Tech stack's own tri-column tree has no .glossary-term hover triggers
+  // of its own (Kubernetes/K3s etc. live there as click-to-expand rows, a
+  // different interaction model) - "Helix" (tools-editor.md's teaser) and
+  // "Ansible" (workflows-iac.md's teaser) are the triggers that are always
+  // visible in column 2 without needing anything expanded, so those are
+  // used here. See the argo-cd-based block below for the nested-popup
+  // chain coverage Kubernetes/K3s used to provide from this page.
   test.beforeEach(async ({ page }) => {
     await page.goto("/tech-stack");
   });
@@ -39,7 +46,7 @@ test.describe("Glossary popups on /tech-stack", () => {
   test("hovering a term shows content immediately, with a progress bar that clears after a beat", async ({
     page,
   }) => {
-    const trigger = page.locator('[data-glossary-term="kubernetes"]').first();
+    const trigger = page.locator('[data-glossary-term="helix"]').first();
     await trigger.hover();
 
     const popup = page.locator(".glossary-popup").first();
@@ -57,7 +64,7 @@ test.describe("Glossary popups on /tech-stack", () => {
   test("leaving the trigger before the charge completes closes the popup immediately", async ({
     page,
   }) => {
-    const trigger = page.locator('[data-glossary-term="kubernetes"]').first();
+    const trigger = page.locator('[data-glossary-term="helix"]').first();
     await trigger.hover();
     const popup = page.locator(".glossary-popup").first();
     await expect(popup.locator(".glossary-popup__progress")).toBeVisible();
@@ -75,6 +82,34 @@ test.describe("Glossary popups on /tech-stack", () => {
     await expect(
       popup.getByRole("link", { name: /open full page/i }),
     ).toHaveAttribute("href", "/glossary/helix/");
+  });
+
+  test("popup never overflows the viewport at a narrow width", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    const trigger = page.locator('[data-glossary-term="ansible"]').first();
+    await trigger.hover();
+
+    const popup = page.locator(".glossary-popup").first();
+    await expect(popup.locator(".glossary-popup__body")).not.toBeEmpty();
+    const box = await popup.boundingBox();
+    expect(box).not.toBeNull();
+    if (box) {
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.y).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(375 + 1);
+      expect(box.y + box.height).toBeLessThanOrEqual(812 + 1);
+    }
+  });
+});
+
+test.describe("Nested glossary popup chains (/glossary/argo-cd)", () => {
+  // argo-cd.md links both Kubernetes and K3s as top-level triggers, and
+  // each of those terms' own pages cross-reference the other - the same
+  // Kubernetes <-> K3s pairing the old flat /tech-stack stack list used to
+  // provide, preserved here now that the Tech stack section no longer
+  // renders hover triggers of its own (see the block above).
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/glossary/argo-cd");
   });
 
   test("a nested term inside an armed popup opens a second popup without closing the first", async ({
@@ -159,22 +194,5 @@ test.describe("Glossary popups on /tech-stack", () => {
     await page.getByRole("heading", { level: 1 }).hover();
     await expect(nestedPopup).toBeHidden();
     await expect(popup).toBeHidden();
-  });
-
-  test("popup never overflows the viewport at a narrow width", async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 812 });
-    const trigger = page.locator('[data-glossary-term="ansible"]').first();
-    await trigger.hover();
-
-    const popup = page.locator(".glossary-popup").first();
-    await expect(popup.locator(".glossary-popup__body")).not.toBeEmpty();
-    const box = await popup.boundingBox();
-    expect(box).not.toBeNull();
-    if (box) {
-      expect(box.x).toBeGreaterThanOrEqual(0);
-      expect(box.y).toBeGreaterThanOrEqual(0);
-      expect(box.x + box.width).toBeLessThanOrEqual(375 + 1);
-      expect(box.y + box.height).toBeLessThanOrEqual(812 + 1);
-    }
   });
 });

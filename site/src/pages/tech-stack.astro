@@ -1,8 +1,9 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import GlossaryPopup from "../components/GlossaryPopup.astro";
 import { linkGlossaryTerms } from "../lib/glossary-link";
+import { stackCategories } from "../data/tech-stack";
 
 const updated = "September 2026";
 
@@ -13,99 +14,38 @@ const glossaryTerms = glossaryEntries.map((e) => ({
   aliases: e.data.aliases,
 }));
 const glossary = (d: string) => linkGlossaryTerms(d, glossaryTerms);
+const glossaryById = new Map(glossaryEntries.map((e) => [e.id, e]));
 
-const tools = [
-  {
-    k: "Editor",
-    d: "Helix. Modal, no plugin system, LSP and tree-sitter built in. The theme picker on this site is generated from every one of its bundled themes.",
-  },
-  {
-    k: "Runtime & tasks",
-    d: "mise to pin language and tool versions per project and to drive per-repo task runners and environment.",
-  },
-  {
-    k: "Containers",
-    d: "Podman, rootless and daemonless.",
-  },
-  {
-    k: "AI pair",
-    d: "Claude Code and OpenCode for day-to-day engineering; purpose-built agent harnesses where a workflow needs one.",
-  },
-  {
-    k: "Secrets",
-    d: "1Password as the source of truth, injected into environments at runtime (via <code>fnox</code> + <code>age</code> here) and never committed.",
-  },
-  {
-    k: "Shell & OS",
-    d: "bash and Linux everywhere, a laptop managed the same way as a node in a cluster.",
-  },
-].map((t) => ({ ...t, d: glossary(t.d) }));
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 
-const workflows = [
-  {
-    k: "Infrastructure as code",
-    d: "Ansible for configuration, Terraform / OpenTofu for provisioning, Packer and cloud-init for images. If it is not in a repo, it is not real.",
-  },
-  {
-    k: "GitOps",
-    d: "Argo CD reconciles cluster state from Git; CI/CD runs in Gitea Actions on a self-hosted forge.",
-  },
-  {
-    k: "Reproducible builds",
-    d: "Projects declare their toolchain and build in containers, so a checkout is enough to build and run. This site is a small example: one <code>mise run start</code> renders a Containerfile and serves the app.",
-  },
-  {
-    k: "Observability first",
-    d: "Grafana, Loki, and Prometheus (with Grafana Alloy) go in early, not after something breaks; Gatus and ntfy cover health and alerting.",
-  },
-  {
-    k: "Compliance as a constraint",
-    d: "NIST 800-171 / CMMC 2.0 requirements shape the architecture from the start rather than being bolted on.",
-  },
-].map((w) => ({ ...w, d: glossary(w.d) }));
-
-const stack = [
-  {
-    k: "AI infrastructure",
-    d: "RAG pipelines, autonomous agents, agent sandboxing, MCP tool integration, Claude Code, OpenCode, Hermes Agent, containerized job orchestration, Open WebUI",
-  },
-  {
-    k: "Application & solution architecture",
-    d: "API design, service decomposition, integration patterns, monolith-to-modular modernization, workflow-oriented applications, system design for scale, design review and architecture standards",
-  },
-  { k: "Languages", d: "Python, TypeScript, Bash, C, C++, C#, Rust, Java, Lisp, TCL" },
-  {
-    k: "Cloud & platform",
-    d: "AWS, Azure, Hetzner Cloud, Proxmox, QEMU, Kubernetes and K3s (including greenfield buildouts), Helm, Docker, Podman, Traefik, Apache Guacamole, Bind9, Cloudflare, systemd",
-  },
-  {
-    k: "Automation & IaC",
-    d: "Ansible, Ansible Molecule, Terraform / OpenTofu, Packer, cloud-init, mise, Argo CD, Gitea Actions, Playwright",
-  },
-  {
-    k: "Observability",
-    d: "Grafana, Loki, Graylog, Prometheus, Grafana Alloy, InfluxDB, Gatus, ntfy",
-  },
-  {
-    k: "Identity, endpoint & PKI",
-    d: "Active Directory, Microsoft Intune, Authentik SSO with enforced MFA and forward-auth, OpenLDAP, SSSD, step-ca private CA, cert-manager, Certbot / Let's Encrypt, 1Password",
-  },
-  {
-    k: "Data & storage",
-    d: "PostgreSQL, CloudNativePG, Redis, SeaweedFS, Gitea, n8n",
-  },
-  {
-    k: "Security & compliance",
-    d: "NIST 800-171, CMMC 2.0 (Levels 2–3), Kubernetes hardening (Pod Security Admission, audit policy, etcd encryption at rest), fail2ban, firewalld / UFW, WireGuard",
-  },
-  { k: "Delivery & collaboration", d: "Jira, Confluence, Slack, Teams" },
-].map((s) => ({ ...s, d: glossary(s.d) }));
+const practiceEntries = await getCollection("practices");
+const practices = await Promise.all(
+  practiceEntries.map(async (e) => ({ ...e, rendered: await render(e) })),
+);
+const bySection = (section: "tools" | "workflows") =>
+  practices
+    .filter((p) => p.data.section === section)
+    .sort((a, b) => a.data.order - b.data.order);
+const tools = bySection("tools");
+const workflows = bySection("workflows");
 ---
 
 <BaseLayout
   title="Tools, Workflows, and My Tech Stack"
   description="The editor, workflows, and technologies Thomas G. Wolf builds and operates with — from Helix and mise to Kubernetes, GitOps, and RAG pipelines."
 >
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Monoton&display=swap"
+    />
+  </Fragment>
   <article class="page">
     <header class="page-head">
       <div class="wrap page-head__inner">
@@ -124,49 +64,135 @@ const stack = [
 
     <section class="section">
       <div class="wrap">
-        <h2 class="section__title">Tools</h2>
-        <ul class="cards">
+        <div class="tri-grid">
+          <h2 class="tri-label" style={`grid-row: span ${tools.length}`}>
+            Tools
+          </h2>
           {
-            tools.map((t) => (
-              <li class="card">
-                <h3 class="card__title">{t.k}</h3>
-                <p class="card__body" set:html={t.d} />
-              </li>
-            ))
+            tools.map((t) => {
+              const { Content } = t.rendered;
+              return (
+                <>
+                  <div class="tri-item">
+                    <h3>{t.data.title}</h3>
+                    <p set:html={glossary(t.data.teaser)} />
+                  </div>
+                  <details class="accordion-item" name="tools-accordion">
+                    <summary>
+                      <span>Details</span>
+                      <span class="chevron" aria-hidden="true">
+                        &rsaquo;
+                      </span>
+                    </summary>
+                    <div class="accordion-body glossary-body">
+                      <Content />
+                    </div>
+                  </details>
+                </>
+              );
+            })
           }
-        </ul>
+        </div>
       </div>
     </section>
 
     <section class="section">
       <div class="wrap">
-        <h2 class="section__title">Workflows</h2>
-        <ul class="cards">
+        <div class="tri-grid">
+          <h2 class="tri-label" style={`grid-row: span ${workflows.length}`}>
+            Workflows
+          </h2>
           {
-            workflows.map((w) => (
-              <li class="card">
-                <h3 class="card__title">{w.k}</h3>
-                <p class="card__body" set:html={w.d} />
-              </li>
-            ))
+            workflows.map((w) => {
+              const { Content } = w.rendered;
+              return (
+                <>
+                  <div class="tri-item">
+                    <h3>{w.data.title}</h3>
+                    <p set:html={glossary(w.data.teaser)} />
+                  </div>
+                  <details class="accordion-item" name="workflows-accordion">
+                    <summary>
+                      <span>Details</span>
+                      <span class="chevron" aria-hidden="true">
+                        &rsaquo;
+                      </span>
+                    </summary>
+                    <div class="accordion-body glossary-body">
+                      <Content />
+                    </div>
+                  </details>
+                </>
+              );
+            })
           }
-        </ul>
+        </div>
       </div>
     </section>
 
     <section class="section">
       <div class="wrap">
-        <h2 class="section__title">Tech stack</h2>
-        <dl class="stack">
+        <div class="tri-grid">
+          <h2
+            class="tri-label"
+            style={`grid-row: span ${stackCategories.length}`}
+          >
+            Tech stack
+          </h2>
           {
-            stack.map((s) => (
+            stackCategories.map((cat) => (
               <>
-                <dt>{s.k}</dt>
-                <dd set:html={s.d} />
+                <div class="tri-item">
+                  <h3>{cat.label}</h3>
+                  <p>{cat.description}</p>
+                </div>
+                <div class="accordion-nested">
+                  {cat.groups.map((group) => (
+                    <details
+                      class="accordion-item accordion-item--group"
+                      name={`stack-groups-${slugify(cat.label)}`}
+                    >
+                      <summary>
+                        <span>{group.label}</span>
+                        <span class="chevron" aria-hidden="true">
+                          &rsaquo;
+                        </span>
+                      </summary>
+                      <div class="accordion-body">
+                        {group.items.map((item) => {
+                          const entry = item.glossaryId
+                            ? glossaryById.get(item.glossaryId)
+                            : undefined;
+                          return entry ? (
+                            <details
+                              class="accordion-item accordion-item--leaf"
+                              name={`stack-leaves-${slugify(cat.label)}-${slugify(group.label)}`}
+                            >
+                              <summary>
+                                <span>{item.label}</span>
+                                <span class="chevron" aria-hidden="true">
+                                  &rsaquo;
+                                </span>
+                              </summary>
+                              <div class="accordion-body glossary-body">
+                                <p>{entry.data.summary}</p>
+                                <a href={`/glossary/${entry.id}/`}>
+                                  Open full page &rarr;
+                                </a>
+                              </div>
+                            </details>
+                          ) : (
+                            <div class="stack-leaf-plain">{item.label}</div>
+                          );
+                        })}
+                      </div>
+                    </details>
+                  ))}
+                </div>
               </>
             ))
           }
-        </dl>
+        </div>
       </div>
     </section>
 
@@ -232,6 +258,10 @@ const stack = [
     padding-block: clamp(1.5rem, 5vw, 3rem);
   }
 
+  .section + .section {
+    border-top: 1px solid var(--border);
+  }
+
   .section__title {
     font-size: 1.05rem;
     font-family: var(--font-mono);
@@ -241,51 +271,94 @@ const stack = [
     margin: 0 0 1.5rem;
   }
 
-  .cards {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  /* three-column grid: category | sub-item | accordion detail */
+  .tri-grid {
     display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    grid-template-columns: 10% 20% 1fr;
+    column-gap: 1.5rem;
+    row-gap: 1rem;
+    align-items: start;
   }
 
-  .card {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.4rem;
-    background: var(--bg-raised);
-    transition: border-color 0.15s ease, transform 0.15s ease;
-  }
-
-  .card:hover {
-    border-color: var(--border-strong);
-    transform: translateY(-2px);
-  }
-
-  .card__title {
-    margin: 0 0 0.5rem;
-    font-size: 1.05rem;
+  .tri-label {
+    grid-column: 1;
+    /* Vertical instead of horizontal text sidesteps an earlier overflow
+       problem entirely - the word's length runs down the block axis
+       (plenty of room, the box spans the whole section) instead of across
+       the narrow 10% column. text-orientation: upright keeps each
+       character in its normal orientation (not rotated sideways),
+       stacked one per line going down the column. letter-spacing (not
+       line-height, which instead controls the inline (here, horizontal)
+       box the text sits in) is what closes up the gap between stacked
+       characters; -0.5em is a first guess at "~80% tighter", worth
+       eyeballing. */
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: -0.5em;
+    /* Flush against the site header (its rendered height: 4rem
+       min-height + 1px border-bottom), not floating a gap below it - the
+       old 5.5rem offset left a ~1.5rem strip between the header and the
+       label's own background where content scrolling up underneath was
+       briefly visible again before the label caught up. The breathing
+       room that gap used to provide now lives inside the box instead, as
+       padding-top, so the label's (opaque) background covers the full
+       run from the header down with nothing showing through. */
+    position: sticky;
+    top: calc(4rem + 1px);
+    padding-top: 1.5rem;
+    /* stretch (not height: 100%) fills the spanned grid area - percentage
+       heights on a grid item can create a sizing feedback loop against
+       auto-sized rows (the row heights depend on the item's height, which
+       depends on the row heights...), which was inflating each section's
+       row heights far beyond their actual content and shoving Tools/
+       Workflows' rows down near the Tech stack section. stretch is
+       resolved after track sizing is finalized, so it doesn't. */
+    align-self: stretch;
+    margin: 0;
+    padding-right: 0.75rem;
+    border-right: 1px solid var(--border);
+    /* An opaque fill so the sticky label reads cleanly against whatever
+       scrolls underneath it - most visible on the mobile stacked layout,
+       where it's pinned directly over the item/accordion text rather
+       than sitting beside it in its own column. z-index is a belt-and-
+       braces addition: sticky already paints above in-flow siblings by
+       default, but this makes the intent explicit. */
+    background: var(--bg);
+    z-index: 1;
+    font-family: "Monoton", system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 72px;
+    line-height: 1;
     color: var(--heading);
   }
 
-  .card__body {
-    margin: 0;
-    color: var(--text-muted);
-    font-size: 0.95rem;
+  .tri-item {
+    grid-column: 2;
   }
 
-  .card__body :global(a) {
+  .tri-item h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+    color: var(--heading);
+  }
+
+  .tri-item p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .tri-item p :global(a) {
     color: var(--link);
     text-decoration: underline;
     text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent);
   }
 
-  .card__body :global(a:hover) {
+  .tri-item p :global(a:hover) {
     color: var(--link-hover);
   }
 
-  .card__body :global(code) {
+  .tri-item p :global(code) {
     font-family: var(--font-mono);
     font-size: 0.85em;
     background: var(--bg-inset);
@@ -295,25 +368,97 @@ const stack = [
     color: var(--code-text);
   }
 
-  .stack {
-    margin: 0;
-    display: grid;
-    grid-template-columns: minmax(11rem, 16rem) 1fr;
-    gap: 0.9rem 1.5rem;
+  /* Bootstrap-style accordion: boxed, full-width button header, rotating
+     chevron - rather than a bare text row with a small arrow. */
+  summary {
+    list-style: none;
+    cursor: pointer;
   }
 
-  .stack dt {
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .accordion-item,
+  .stack-leaf-plain {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-raised);
+    overflow: hidden;
+  }
+
+  .accordion-item {
+    grid-column: 3;
+  }
+
+  .accordion-nested {
+    grid-column: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .accordion-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1rem;
     font-weight: 600;
     color: var(--heading);
   }
 
-  .stack dd {
-    margin: 0;
-    color: var(--text-muted);
+  .accordion-item[open] > summary {
+    background: color-mix(in srgb, var(--accent) 12%, var(--bg-raised));
+    border-bottom: 1px solid var(--border);
   }
 
-  .section--colophon {
-    border-top: 1px solid var(--border);
+  .chevron {
+    flex: 0 0 auto;
+    color: var(--text-faint);
+    transition: transform 0.15s ease;
+  }
+
+  details[open] > summary > .chevron {
+    transform: rotate(90deg);
+  }
+
+  .accordion-body {
+    padding: 0.9rem 1rem;
+  }
+
+  /* nested (Group -> Leaf) tier reads as a sub-level: muted, smaller */
+  .accordion-item--group > .accordion-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: var(--bg-inset);
+  }
+
+  .accordion-item--leaf {
+    background: var(--bg);
+  }
+
+  .accordion-item--leaf summary {
+    padding: 0.6rem 0.85rem;
+    font-weight: 500;
+    font-size: 0.92rem;
+  }
+
+  .accordion-item--leaf .accordion-body {
+    padding: 0 0.85rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .accordion-item--leaf .accordion-body p {
+    margin: 0 0 0.5em;
+  }
+
+  .stack-leaf-plain {
+    padding: 0.6rem 0.85rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
   }
 
   .section--colophon p {
@@ -335,14 +480,42 @@ const stack = [
     color: var(--code-text);
   }
 
-  @media (max-width: 40rem) {
-    .stack {
-      grid-template-columns: 1fr;
-      gap: 0.2rem 0;
+  @media (max-width: 48rem) {
+    /* display: flex (not just a 1-column grid-template-columns) is the
+       point here: .tri-item/.accordion-item/.accordion-nested all carry
+       an explicit grid-column, and .tri-label an explicit grid-row span
+       (inline style, so a class rule can't override it without
+       !important). Left in a grid, those placements force the browser to
+       implicitly generate extra column tracks to satisfy them regardless
+       of grid-template-columns, silently recreating a multi-column
+       layout - which is what was overflowing at narrow widths. Dropping
+       `display: grid` makes every grid-column/grid-row placement inert,
+       so children just stack in DOM order instead. */
+    .tri-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
     }
 
-    .stack dd {
-      margin-bottom: 1.1rem;
+    /* Vertical text only makes sense once there are side-by-side columns
+       to run alongside - stacked full-width, it just reads as an oddly
+       narrow, oddly cropped heading. Back to normal horizontal text,
+       sized down from 72px to a regular heading size, with a bottom rule
+       taking over from the vertical divider (which had nothing left to
+       divide). position: sticky carries over unchanged from the base
+       rule - it still works as a plain "stays put while its section
+       scrolls by" heading once the container is a flex column instead of
+       a grid; sticky doesn't care which layout mode its parent uses. */
+    .tri-label {
+      writing-mode: horizontal-tb;
+      text-orientation: mixed;
+      letter-spacing: normal;
+      font-size: 1.75rem;
+      line-height: 1.2;
+      padding-right: 0;
+      padding-bottom: 0.5rem;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
     }
   }
 </style>
