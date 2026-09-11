@@ -1,5 +1,8 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
+import GlossaryPopup from "../components/GlossaryPopup.astro";
+import { linkGlossaryTerms } from "../lib/glossary-link";
 
 interface Props {
   frontmatter: {
@@ -11,6 +14,20 @@ interface Props {
 
 const { frontmatter } = Astro.props;
 const title = frontmatter.title ?? "Untitled";
+
+// Glossary hover terms applied to the rendered markdown body without
+// touching the source .md file itself: render the slot to a string (same
+// trick tech-stack.astro's set:html usages rely on) and run it through the
+// same linkGlossaryTerms() used there, rather than special-casing any one
+// page's markdown source.
+const glossaryEntries = await getCollection("glossary");
+const glossaryTerms = glossaryEntries.map((e) => ({
+  id: e.id,
+  title: e.data.title,
+  aliases: e.data.aliases,
+}));
+const rawBody = await Astro.slots.render("default");
+const linkedBody = linkGlossaryTerms(rawBody, glossaryTerms);
 ---
 
 <BaseLayout title={title} description={frontmatter.description}>
@@ -25,10 +42,9 @@ const title = frontmatter.title ?? "Untitled";
         }
       </header>
 
-      <div class="prose">
-        <slot />
-      </div>
+      <div class="prose" set:html={linkedBody} />
     </div>
+    <GlossaryPopup terms={glossaryTerms} />
   </article>
 </BaseLayout>
 

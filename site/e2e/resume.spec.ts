@@ -26,3 +26,13 @@ test("print stylesheet hides the site header and footer", async ({ page }) => {
   await expect(page.locator(".site-header")).toHaveCSS("display", "none");
   await expect(page.locator(".site-footer")).toHaveCSS("display", "none");
 });
+
+test("glossary terms in the résumé body are hoverable", async ({ page }) => {
+  // Applied by MarkdownPage.astro (linkGlossaryTerms run on the rendered
+  // slot content) without resume.md itself needing any glossary markup.
+  await page.goto("/resume");
+  const trigger = page.locator('[data-glossary-term="kubernetes"]').first();
+  await trigger.hover();
+  const popup = page.locator(".glossary-popup").first();
+  await expect(popup.locator(".glossary-popup__body")).not.toBeEmpty();
+});
