@@ -9,6 +9,7 @@ Personal website for salishseawolf.com. The actual site is a minimal Astro proje
 ## Layout
 
 - `site/` — the Astro app. Pages live in `site/src/pages/` (`.astro` and `.md` files map to routes by filename). `site/src/pages/resume.md` renders the resume.
+- `site/e2e/` — Playwright end-to-end specs, configured by `site/playwright.config.ts`. Assert on structure/ARIA/attributes, not marketing copy, which changes often.
 - `mise.toml` — task runner, tool pinning, and env defaults for the whole build/run workflow.
 - `Containerfile.j2` — Jinja source for the container image. `Containerfile` is **generated** and git-ignored; never edit it directly.
 - `fnox.toml` — secret provider config (fnox: 1Password vault `Personal` + age). Secrets are injected via mise env, not committed.
@@ -25,6 +26,7 @@ Run mise tasks from the repo root. `MODE` (default `development`) selects the bu
 - `mise run mode` — print the resolved `MODE` and image name.
 - `mise run clean` — delete the generated `Containerfile`.
 - `MODE=production mise run start` — run the production (nginx static) variant.
+- `mise run test:e2e` (alias `test`) — builds the site and runs the Playwright suite (`site/e2e/`) inside the official Playwright container image; no host Playwright/browser install needed. Keep the image tag pinned in this task's `mise.toml` entry in lockstep with `site/package.json`'s `@playwright/test` version.
 
 Inside `site/` the standard Astro scripts also work: `npm run dev` (port 4321), `npm run build` (to `site/dist/`), `npm run preview`. (`astro check` is not available — no `@astrojs/check` dependency.)
 

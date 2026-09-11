@@ -47,9 +47,26 @@ const links = [
     position: sticky;
     top: 0;
     z-index: 10;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /*
+   * The frosted-glass fill lives on a pseudo-element rather than directly on
+   * .site-header. `backdrop-filter` (like `transform`/`filter`) makes the
+   * element it's set on a containing block for `position: fixed`
+   * descendants - and ThemePicker's mobile bottom-sheet panel is exactly
+   * that, nested inside this header. Left on .site-header itself, the sheet
+   * pins to the ~4rem header box instead of the viewport, rendering almost
+   * entirely off-screen above it. Putting the filter on ::before instead
+   * keeps the visual effect without trapping anything.
+   */
+  .site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background: color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
   }
 
   .site-header__inner {

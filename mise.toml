@@ -138,6 +138,29 @@ depends = ['podman:build']
 interactive = true
 run = 'podman run --rm -ti --entrypoint bash localhost/${IMAGE_NAME:?}:${MODE:?}'
 
+[tasks."test:e2e"]
+description = "Runs the Playwright e2e suite in a container against a production build"
+alias = 'test'
+run = ['''
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Keep in lockstep with site/package.json's "@playwright/test" version -
+# mismatched npm package vs. image versions is the most common way this
+# silently breaks.
+image="mcr.microsoft.com/playwright:v1.63.0-noble"
+
+echo "running Playwright e2e suite (${image}) against a production build"
+exec podman run --rm \
+  --ipc host \
+  --userns "keep-id:uid=1000,gid=1000" \
+  --volume "${MISE_PROJECT_ROOT:?}/site:/site:z" \
+  --volume "/site/node_modules" \
+  --workdir /site \
+  "${image}" \
+  bash -c "npm ci && npm run build && npm run test:e2e"
+''']
+
 [tasks.clean]
 description = "Removes generated build artifacts"
 run = 'rm -f Containerfile'
