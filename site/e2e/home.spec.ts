@@ -6,9 +6,10 @@ test.beforeEach(async ({ page }) => {
 
 test("hero CTAs link to the résumé and an email", async ({ page }) => {
   const ctas = page.locator(".hero__actions a");
-  await expect(ctas).toHaveCount(2);
-  await expect(ctas.nth(0)).toHaveAttribute("href", "/resume");
-  await expect(ctas.nth(1)).toHaveAttribute("href", /^mailto:/);
+  await expect(ctas).toHaveCount(3);
+  await expect(ctas.nth(0)).toHaveAttribute("href", /^mailto:/);
+  await expect(ctas.nth(1)).toHaveAttribute("href", "/resume");
+  await expect(ctas.nth(2)).toHaveAttribute("href", "/tech-stack");
 });
 
 test("every focus card has a non-empty heading", async ({ page }) => {

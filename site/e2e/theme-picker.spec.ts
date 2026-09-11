@@ -151,7 +151,14 @@ test("clicking outside the widget closes the panel", async ({ page }) => {
   // The hero <h1> is always well outside the widget, unlike a fixed
   // coordinate - the mobile bottom sheet covers most of the lower viewport,
   // so a hardcoded point that's "outside" on desktop can land inside it here.
-  await page.getByRole("heading", { level: 1 }).click({ position: { x: 5, y: 5 } });
+  // The h1 now wraps across several lines (it sits further down the page,
+  // behind a much taller column-1 label above it), and its *first* line can
+  // itself end up scrolled behind the sticky header - click near the
+  // bottom of the heading's own box instead of a fixed corner, so the
+  // target tracks wherever its last line actually ends up.
+  const heading = page.getByRole("heading", { level: 1 });
+  const box = await heading.boundingBox();
+  await heading.click({ position: { x: 5, y: (box?.height ?? 10) - 5 } });
   await expect(panel).toBeHidden();
 });
 

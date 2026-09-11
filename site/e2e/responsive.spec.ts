@@ -64,3 +64,17 @@ test("tech-stack column layout collapses to a single stacked flow at narrow widt
   expect(background).not.toBe("rgba(0, 0, 0, 0)");
   expect(background).not.toBe("transparent");
 });
+
+test("home page column layout collapses to a single stacked flow at narrow widths", async ({
+  page,
+}) => {
+  // Same two-column treatment (and the same mobile fallback fix) as
+  // /tech-stack's tri-grid, applied to index.astro's .bi-grid - one
+  // assertion here is enough since the underlying mechanism is identical
+  // and already has full coverage above.
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/");
+
+  const grid = page.locator(".bi-grid").first();
+  await expect(grid).toHaveCSS("display", "flex");
+});

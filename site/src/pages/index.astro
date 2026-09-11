@@ -21,12 +21,12 @@ const focus = [
 ];
 
 const elsewhere = [
-  { href: "/resume", label: "Résumé", note: "The full history" },
   {
-    href: "/tech-stack",
-    label: "Tech stack",
-    note: "Tools, workflows, and what I build with",
+    href: "mailto:hire.me@wolfhouse.me",
+    label: "Email",
+    note: "hire.me@wolfhouse.me",
   },
+  { href: "/resume", label: "Resumé", note: "The full history" },
   {
     href: "https://github.com/MightBeAWolf",
     label: "GitHub",
@@ -38,76 +38,185 @@ const elsewhere = [
     note: "Professional network",
   },
   {
-    href: "mailto:hire.me@wolfhouse.me",
-    label: "Email",
-    note: "hire.me@wolfhouse.me",
+    href: "/tech-stack",
+    label: "Tech stack",
+    note: "Tools, workflows, and what I build with",
   },
 ];
 ---
 
 <BaseLayout>
-  <section class="hero">
-    <div class="wrap hero__inner">
-      <p class="eyebrow">Salish Sea Wolf LLC</p>
-      <h1 class="hero__title">
-        <span class="hero__accent">Reliable</span> software and&nbsp;
-        infrastructure for start-ups and large enterprises alike.
-      </h1>
-      <p class="hero__lede">
-        I'm <strong>Thomas G. Wolf</strong>, a software and infrastructure
-        architect in the Greater Seattle Area with 10+ years shipping
-        maintainable software, and standing up virtualization stacks in
-        compliant environments from the ground up.
-      </p>
-      <div class="hero__actions">
-        <a class="button button--primary" href="/resume">View résumé</a>
-        <a class="button" href="mailto:hire.me@wolfhouse.me">Get in touch</a>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Inline&family=Monoton&display=swap"
+    />
+  </Fragment>
+
+  <section class="section section--intro">
+    <div class="wrap">
+      <div class="bi-grid">
+        <h2 class="bi-label">Who</h2>
+        <div class="bi-content">
+          <p class="eyebrow eyebrow--masthead">
+            Thomas G. Wolf<br />Salish Sea Wolf LLC
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <h2 class="section__title">What I focus on</h2>
-      <ul class="cards">
-        {
-          focus.map((item) => (
-            <li class="card">
-              <h3 class="card__title">{item.k}</h3>
-              <p class="card__body">{item.d}</p>
-            </li>
-          ))
-        }
-      </ul>
+      <div class="bi-grid">
+        <h2 class="bi-label">What</h2>
+        <div class="bi-content">
+          <div class="hero-copy">
+            <h1 class="hero__title">
+              <span class="hero__accent">Reliable</span> software and&nbsp;
+              infrastructure for start-ups and large enterprises alike.
+            </h1>
+            <p class="hero__lede">
+              I'm <strong>Thomas G. Wolf</strong>, a software and
+              infrastructure architect in the Greater Seattle Area with 10+
+              years shipping maintainable software, and standing up
+              virtualization stacks in compliant environments from the ground
+              up.
+            </p>
+            <div class="hero__actions">
+              <a class="button button--primary" href="mailto:hire.me@wolfhouse.me">Get in touch</a>
+              <a class="button" href="/resume">View resumé</a>
+              <a class="button" href="/tech-stack">View tech stack</a>
+            </div>
+          </div>
+          <ul class="cards">
+            {
+              focus.map((item) => (
+                <li class="card">
+                  <h3 class="card__title">{item.k}</h3>
+                  <p class="card__body">{item.d}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <h2 class="section__title">Elsewhere</h2>
-      <ul class="links">
-        {
-          elsewhere.map((link) => (
-            <li>
-              <a class="link-row" href={link.href}>
-                <span class="link-row__label">{link.label}</span>
-                <span class="link-row__note">{link.note}</span>
-                <span class="link-row__arrow" aria-hidden="true">
-                  &rarr;
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+      <div class="bi-grid">
+        <h2 class="bi-label">Where</h2>
+        <div class="bi-content">
+          <ul class="links">
+            {
+              elsewhere.map((link) => (
+                <li>
+                  <a class="link-row" href={link.href}>
+                    <span class="link-row__label">{link.label}</span>
+                    <span class="link-row__note">{link.note}</span>
+                    <span class="link-row__arrow" aria-hidden="true">
+                      &rarr;
+                    </span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .hero__inner {
-    padding-block: clamp(3.5rem, 12vw, 7rem) clamp(2rem, 6vw, 3.5rem);
+  .section {
+    padding-block: clamp(2rem, 6vw, 3.5rem);
+  }
+
+  .section + .section {
+    border-top: 1px solid var(--border);
+  }
+
+  .section--intro {
+    padding-block-start: clamp(3.5rem, 12vw, 7rem);
+  }
+
+  .eyebrow--masthead {
+    font-family: "Big Shoulders Inline", var(--font-mono);
+    font-size: 72px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* two-column layout: category label | content - same visual language as
+     /tech-stack's three-column tri-grid (Monoton vertical label, sticky,
+     flush against the header, opaque background so it stays readable over
+     whatever scrolls underneath), just one fewer column and no per-row
+     accordion machinery, since each section here is a single label next
+     to a single block of content rather than a list of expandable rows. */
+  .bi-grid {
+    display: grid;
+    grid-template-columns: 12% 1fr;
+    column-gap: 1.5rem;
+    align-items: start;
+  }
+
+  .bi-label {
+    grid-column: 1;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: -0.5em;
+    position: sticky;
+    top: calc(4rem + 1px);
+    padding-top: 1.5rem;
+    align-self: stretch;
+    margin: 0;
+    padding-right: 0.75rem;
+    border-right: 1px solid var(--border);
+    background: var(--bg);
+    z-index: 1;
+    font-family: "Monoton", system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 72px;
+    line-height: 1;
+    color: var(--heading);
+  }
+
+  .bi-content {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .hero-copy {
     max-width: 46rem;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 48rem) {
+    /* Same fix as /tech-stack's mobile fallback: dropping display: grid
+       entirely (not just changing grid-template-columns) makes the
+       explicit grid-column placements above inert instead of forcing the
+       browser to implicitly regenerate the columns they name. */
+    .bi-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .bi-label {
+      writing-mode: horizontal-tb;
+      text-orientation: mixed;
+      letter-spacing: normal;
+      font-size: 1.75rem;
+      line-height: 1.2;
+      padding-right: 0;
+      padding-bottom: 0.5rem;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
   }
 
   .hero__title {
@@ -136,26 +245,13 @@ const elsewhere = [
     margin-top: 2rem;
   }
 
-  .section {
-    padding-block: clamp(2rem, 6vw, 3.5rem);
-  }
-
-  .section__title {
-    font-size: 1.05rem;
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--text-muted);
-    margin: 0 0 1.5rem;
-  }
-
   .cards {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .card {
@@ -181,6 +277,12 @@ const elsewhere = [
     margin: 0;
     color: var(--text-muted);
     font-size: 0.95rem;
+  }
+
+  @media (max-width: 40rem) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
   }
 
   .links {
