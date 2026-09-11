@@ -1,0 +1,68 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <p class="site-footer__line">
+      &copy; {year} Thomas G. Wolf &middot; Salish Sea Wolf LLC
+    </p>
+    <p class="site-footer__line site-footer__meta">
+      Built with <a href="https://astro.build" rel="noopener">Astro</a> &middot;
+      theme palettes adapted from the <a
+        href="https://github.com/helix-editor/helix"
+        rel="noopener">Helix editor</a
+      >
+    </p>
+    <nav class="site-footer__links" aria-label="Elsewhere">
+      <a href="https://github.com/MightBeAWolf" rel="me noopener" target="_blank"
+        >GitHub</a
+      >
+      <a
+        href="https://www.linkedin.com/in/thomas-wolf-207773227/"
+        rel="me noopener"
+        target="_blank">LinkedIn</a
+      >
+      <a href="mailto:hire.me@wolfhouse.me">Email</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 5rem;
+    background: var(--bg-raised);
+    border-top: 1px solid var(--border);
+  }
+
+  .site-footer__inner {
+    padding-block: 2.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .site-footer__line {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .site-footer__meta a {
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  }
+
+  .site-footer__meta a:hover {
+    color: var(--accent);
+  }
+
+  .site-footer__links {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.1rem;
+    font-size: 0.9rem;
+  }
+</style>

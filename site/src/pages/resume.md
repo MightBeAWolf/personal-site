@@ -1,3 +1,10 @@
+---
+layout: ../layouts/MarkdownPage.astro
+title: Résumé
+description: "Résumé of Thomas G. Wolf — software, infrastructure, and AI engineering specialist, Greater Seattle Area."
+updated: September 2026
+---
+
 # Thomas G. Wolf
 
 **Software / Infrastructure / AI Engineering Specialist**

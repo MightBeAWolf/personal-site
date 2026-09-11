@@ -1,0 +1,112 @@
+---
+import ThemePicker from "./ThemePicker.astro";
+
+const { pathname } = Astro.url;
+const isActive = (href: string) =>
+  href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/resume", label: "Résumé" },
+];
+---
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/">
+      <span class="brand__mark" aria-hidden="true">◣</span>
+      <span class="brand__text">Salish Sea Wolf</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class:list={["site-nav__link", { "is-active": isActive(link.href) }]}
+            aria-current={isActive(link.href) ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a
+        class="site-nav__link"
+        href="https://github.com/MightBeAWolf"
+        rel="me noopener"
+        target="_blank">GitHub</a
+      >
+      <ThemePicker />
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6ch;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .brand:hover {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .brand__mark {
+    color: var(--heading);
+    font-size: 1.1em;
+    transition: transform 0.2s ease;
+  }
+
+  .brand:hover .brand__mark {
+    transform: rotate(-12deg);
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2vw, 1.4rem);
+  }
+
+  .site-nav__link {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .site-nav__link:hover {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .site-nav__link.is-active {
+    color: var(--heading);
+  }
+
+  @media (max-width: 30rem) {
+    .brand__text {
+      display: none;
+    }
+  }
+</style>

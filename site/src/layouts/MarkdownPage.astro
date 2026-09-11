@@ -1,0 +1,205 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  frontmatter: {
+    title?: string;
+    description?: string;
+    updated?: string;
+  };
+}
+
+const { frontmatter } = Astro.props;
+const title = frontmatter.title ?? "Untitled";
+---
+
+<BaseLayout title={title} description={frontmatter.description}>
+  <article class="prose-page">
+    <div class="wrap prose-page__inner">
+      <header class="prose-page__head">
+        <a class="prose-page__back" href="/">&larr; Home</a>
+        {
+          frontmatter.updated && (
+            <p class="prose-page__updated">Updated {frontmatter.updated}</p>
+          )
+        }
+      </header>
+
+      <div class="prose">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose-page__inner {
+    max-width: 50rem;
+    padding-block: clamp(2rem, 6vw, 4rem);
+  }
+
+  .prose-page__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .prose-page__back {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .prose-page__back:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .prose-page__updated {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-faint);
+  }
+
+  /* --- markdown body ------------------------------------------------ */
+  .prose {
+    max-width: var(--measure);
+  }
+
+  .prose :global(h1) {
+    font-size: clamp(2rem, 1.6rem + 2vw, 2.75rem);
+    margin: 0 0 0.35em;
+  }
+
+  .prose :global(h1 + p) {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+  }
+
+  .prose :global(h1 + p strong) {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .prose :global(h2) {
+    font-size: 1.5rem;
+    margin: 2.5em 0 0.8em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .prose :global(h3) {
+    font-size: 1.15rem;
+    color: var(--text);
+    margin: 2em 0 0.2em;
+  }
+
+  .prose :global(h3 + p) {
+    margin-top: 0.2em;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    color: var(--text-faint);
+  }
+
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 1.15em;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.3em;
+  }
+
+  .prose :global(li) {
+    margin-bottom: 0.4em;
+  }
+
+  .prose :global(li::marker) {
+    color: var(--accent);
+  }
+
+  .prose :global(a) {
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--link) 45%, transparent);
+  }
+
+  .prose :global(a:hover) {
+    text-decoration-color: currentColor;
+  }
+
+  .prose :global(strong) {
+    color: var(--text);
+    font-weight: 650;
+  }
+
+  .prose :global(em) {
+    color: var(--text-muted);
+  }
+
+  .prose :global(blockquote) {
+    margin: 1.5em 0;
+    padding: 0.4em 0 0.4em 1.1em;
+    border-left: 3px solid var(--quote-border);
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .prose :global(hr) {
+    margin: 2.75em 0;
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    font-size: 0.95em;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    text-align: left;
+    padding: 0.55em 0.75em;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .prose :global(th) {
+    color: var(--heading);
+    font-weight: 600;
+  }
+
+  /* --- print (résumé) --------------------------------------------- */
+  @media print {
+    :global(.site-header),
+    :global(.site-footer),
+    .prose-page__head {
+      display: none;
+    }
+
+    .prose-page__inner {
+      padding: 0;
+      max-width: none;
+    }
+
+    .prose {
+      max-width: none;
+    }
+
+    .prose :global(h1),
+    .prose :global(h2),
+    .prose :global(h3),
+    .prose :global(a),
+    .prose :global(li::marker),
+    .prose :global(strong) {
+      color: #000;
+    }
+
+    .prose :global(h2) {
+      border-bottom-color: #999;
+    }
+  }
+</style>

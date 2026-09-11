@@ -1,0 +1,2301 @@
+[
+ {
+  "id": "acid",
+  "name": "Acid",
+  "dark": true,
+  "swatch": {
+   "bg": "#161e26",
+   "heading": "#b0ff80",
+   "link": "#80d0ff",
+   "accent": "#b0ff80"
+  }
+ },
+ {
+  "id": "acme",
+  "name": "Acme",
+  "dark": false,
+  "swatch": {
+   "bg": "#ffffea",
+   "heading": "#000000",
+   "link": "#000000",
+   "accent": "#a0342f"
+  }
+ },
+ {
+  "id": "adwaita-dark",
+  "name": "Adwaita Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#1c1c1f",
+   "heading": "#5bc8af",
+   "link": "#3584e4",
+   "accent": "#5bc8af"
+  }
+ },
+ {
+  "id": "adwaita-light",
+  "name": "Adwaita Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#ffffff",
+   "heading": "#20898a",
+   "link": "#1a5fb4",
+   "accent": "#20898a"
+  }
+ },
+ {
+  "id": "akari-dawn",
+  "name": "Akari Dawn",
+  "dark": false,
+  "swatch": {
+   "bg": "#e4ded6",
+   "heading": "#8a4530",
+   "link": "#131a20",
+   "accent": "#8a4530"
+  }
+ },
+ {
+  "id": "akari-night",
+  "name": "Akari Night",
+  "dark": true,
+  "swatch": {
+   "bg": "#25231f",
+   "heading": "#e26a3b",
+   "link": "#a7b5c1",
+   "accent": "#a1c492"
+  }
+ },
+ {
+  "id": "amberwood",
+  "name": "Amberwood",
+  "dark": true,
+  "swatch": {
+   "bg": "#0f1014",
+   "heading": "#b9aeda",
+   "link": "#90b99f",
+   "accent": "#b9aeda"
+  }
+ },
+ {
+  "id": "andromeda",
+  "name": "Andromeda",
+  "dark": true,
+  "swatch": {
+   "bg": "#23262e",
+   "heading": "#f92672",
+   "link": "#7cb7ff",
+   "accent": "#f92672"
+  }
+ },
+ {
+  "id": "ao",
+  "name": "Ao",
+  "dark": true,
+  "swatch": {
+   "bg": "#080d15",
+   "heading": "#ff9000",
+   "link": "#d2a8ff",
+   "accent": "#ff9000"
+  }
+ },
+ {
+  "id": "ashen",
+  "name": "Ashen",
+  "dark": true,
+  "swatch": {
+   "bg": "#121212",
+   "heading": "#df6464",
+   "link": "#df6464",
+   "accent": "#df6464"
+  }
+ },
+ {
+  "id": "ashokai",
+  "name": "Ashokai",
+  "dark": true,
+  "swatch": {
+   "bg": "#191d24",
+   "heading": "#9983d7",
+   "link": "#7ac3ff",
+   "accent": "#9983d7"
+  }
+ },
+ {
+  "id": "ashokai_brahn",
+  "name": "Ashokai Brahn",
+  "dark": true,
+  "swatch": {
+   "bg": "#2a211d",
+   "heading": "#b57ced",
+   "link": "#7ac3ff",
+   "accent": "#43bb71"
+  }
+ },
+ {
+  "id": "ashokai_evermoor",
+  "name": "Ashokai Evermoor",
+  "dark": true,
+  "swatch": {
+   "bg": "#1d2a26",
+   "heading": "#9983d7",
+   "link": "#7ac3ff",
+   "accent": "#7aea92"
+  }
+ },
+ {
+  "id": "ashokai_urple",
+  "name": "Ashokai Urple",
+  "dark": true,
+  "swatch": {
+   "bg": "#211d2a",
+   "heading": "#9983d7",
+   "link": "#7ac3ff",
+   "accent": "#9983d7"
+  }
+ },
+ {
+  "id": "ataraxia",
+  "name": "Ataraxia",
+  "dark": true,
+  "swatch": {
+   "bg": "#1c0c28",
+   "heading": "#8b5dd4",
+   "link": "#00ddff",
+   "accent": "#6e5f82"
+  }
+ },
+ {
+  "id": "atlas-ragnarok",
+  "name": "Atlas Ragnarok",
+  "dark": true,
+  "swatch": {
+   "bg": "#000000",
+   "heading": "#3b82f6",
+   "link": "#60a5fa",
+   "accent": "#3b82f6"
+  }
+ },
+ {
+  "id": "aura-dark",
+  "name": "Aura Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#15141b",
+   "heading": "#ffca85",
+   "link": "#61ffca",
+   "accent": "#6d6d6d"
+  }
+ },
+ {
+  "id": "aura-dark-soft",
+  "name": "Aura Dark Soft",
+  "dark": true,
+  "swatch": {
+   "bg": "#15141b",
+   "heading": "#c7a06f",
+   "link": "#54c59f",
+   "accent": "#6d6d6d"
+  }
+ },
+ {
+  "id": "aurara",
+  "name": "Aurara",
+  "dark": true,
+  "swatch": {
+   "bg": "#15141b",
+   "heading": "#e4b782",
+   "link": "#6d6d6d",
+   "accent": "#e4b782"
+  }
+ },
+ {
+  "id": "autumn",
+  "name": "Autumn",
+  "dark": true,
+  "swatch": {
+   "bg": "#232323",
+   "heading": "#fad566",
+   "link": "#72a59e",
+   "accent": "#99be70"
+  }
+ },
+ {
+  "id": "autumn_night",
+  "name": "Autumn Night",
+  "dark": true,
+  "swatch": {
+   "bg": "#090909",
+   "heading": "#fad566",
+   "link": "#72a59e",
+   "accent": "#99be70"
+  }
+ },
+ {
+  "id": "ayu_dark",
+  "name": "Ayu Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#0f1419",
+   "heading": "#ff8f40",
+   "link": "#59c2ff",
+   "accent": "#ff8f40"
+  }
+ },
+ {
+  "id": "ayu_evolve",
+  "name": "Ayu Evolve",
+  "dark": true,
+  "swatch": {
+   "bg": "#020202",
+   "heading": "#ff8f40",
+   "link": "#59c2ff",
+   "accent": "#ff8f40"
+  }
+ },
+ {
+  "id": "ayu_light",
+  "name": "Ayu Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#fafafa",
+   "heading": "#af632b",
+   "link": "#3086c4",
+   "accent": "#b27724"
+  }
+ },
+ {
+  "id": "ayu_mirage",
+  "name": "Ayu Mirage",
+  "dark": true,
+  "swatch": {
+   "bg": "#1f2430",
+   "heading": "#ffad66",
+   "link": "#73d0ff",
+   "accent": "#ffad66"
+  }
+ },
+ {
+  "id": "base16_default_dark",
+  "name": "Base16 Default Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#181818",
+   "heading": "#7cafc2",
+   "link": "#dc9656",
+   "accent": "#a1b56c"
+  }
+ },
+ {
+  "id": "base16_default_light",
+  "name": "Base16 Default Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#f8f8f8",
+   "heading": "#577a88",
+   "link": "#9a693c",
+   "accent": "#717f4c"
+  }
+ },
+ {
+  "id": "beans",
+  "name": "Beans",
+  "dark": true,
+  "swatch": {
+   "bg": "#111111",
+   "heading": "#8197bf",
+   "link": "#cee318",
+   "accent": "#cee318"
+  }
+ },
+ {
+  "id": "bogster",
+  "name": "Bogster",
+  "dark": true,
+  "swatch": {
+   "bg": "#161c23",
+   "heading": "#36b2d4",
+   "link": "#dcb659",
+   "accent": "#36b2d4"
+  }
+ },
+ {
+  "id": "bogster_light",
+  "name": "Bogster Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#f6fbd6",
+   "heading": "#3e869a",
+   "link": "#a58023",
+   "accent": "#1e8c6d"
+  }
+ },
+ {
+  "id": "boo_berry",
+  "name": "Boo Berry",
+  "dark": true,
+  "swatch": {
+   "bg": "#3a2a4d",
+   "heading": "#e3c0a8",
+   "link": "#c78dfc",
+   "accent": "#e3c0a8"
+  }
+ },
+ {
+  "id": "carbon",
+  "name": "Carbon",
+  "dark": true,
+  "swatch": {
+   "bg": "#161616",
+   "heading": "#82cfff",
+   "link": "#4589ff",
+   "accent": "#82cfff"
+  }
+ },
+ {
+  "id": "carbonfox",
+  "name": "Carbonfox",
+  "dark": true,
+  "swatch": {
+   "bg": "#161616",
+   "heading": "#08bdba",
+   "link": "#2dc7c4",
+   "accent": "#be95ff"
+  }
+ },
+ {
+  "id": "catppuccin_frappe",
+  "name": "Catppuccin Frappe",
+  "dark": true,
+  "swatch": {
+   "bg": "#303446",
+   "heading": "#e78284",
+   "link": "#8caaee",
+   "accent": "#e78284"
+  }
+ },
+ {
+  "id": "catppuccin_latte",
+  "name": "Catppuccin Latte",
+  "dark": false,
+  "swatch": {
+   "bg": "#eff1f5",
+   "heading": "#d20f39",
+   "link": "#1e66f5",
+   "accent": "#368825"
+  }
+ },
+ {
+  "id": "catppuccin_macchiato",
+  "name": "Catppuccin Macchiato",
+  "dark": true,
+  "swatch": {
+   "bg": "#24273a",
+   "heading": "#ed8796",
+   "link": "#8aadf4",
+   "accent": "#ed8796"
+  }
+ },
+ {
+  "id": "catppuccin_mocha",
+  "name": "Catppuccin Mocha",
+  "dark": true,
+  "swatch": {
+   "bg": "#1e1e2e",
+   "heading": "#f38ba8",
+   "link": "#89b4fa",
+   "accent": "#f38ba8"
+  }
+ },
+ {
+  "id": "curzon",
+  "name": "Curzon",
+  "dark": true,
+  "swatch": {
+   "bg": "#000000",
+   "heading": "#bee0ec",
+   "link": "#b8b8b8",
+   "accent": "#eccdba"
+  }
+ },
+ {
+  "id": "cyan_light",
+  "name": "Cyan Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#f2f3f7",
+   "heading": "#660e7a",
+   "link": "#343a54",
+   "accent": "#00733b"
+  }
+ },
+ {
+  "id": "darcula",
+  "name": "Darcula",
+  "dark": true,
+  "swatch": {
+   "bg": "#282828",
+   "heading": "#cc7832",
+   "link": "#6897bb",
+   "accent": "#9876aa"
+  }
+ },
+ {
+  "id": "darcula-solid",
+  "name": "Darcula Solid",
+  "dark": true,
+  "swatch": {
+   "bg": "#1f1f1f",
+   "heading": "#cc7832",
+   "link": "#6897bb",
+   "accent": "#9876aa"
+  }
+ },
+ {
+  "id": "dark-synthwave",
+  "name": "Dark Synthwave",
+  "dark": true,
+  "swatch": {
+   "bg": "#000000",
+   "heading": "#ff7edb",
+   "link": "#72f1b8",
+   "accent": "#f73232"
+  }
+ },
+ {
+  "id": "dark_high_contrast",
+  "name": "Dark High Contrast",
+  "dark": true,
+  "swatch": {
+   "bg": "#000000",
+   "heading": "#cedc84",
+   "link": "#66a4ff",
+   "accent": "#ce9178"
+  }
+ },
+ {
+  "id": "dark_plus",
+  "name": "Dark Plus",
+  "dark": true,
+  "swatch": {
+   "bg": "#1e1e1e",
+   "heading": "#569cd6",
+   "link": "#ce9178",
+   "accent": "#ce9178"
+  }
+ },
+ {
+  "id": "doom-one",
+  "name": "Doom One",
+  "dark": true,
+  "swatch": {
+   "bg": "#282c34",
+   "heading": "#e99bea",
+   "link": "#46d9ff",
+   "accent": "#e99bea"
+  }
+ },
+ {
+  "id": "doom_acario_dark",
+  "name": "Doom Acario Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#0d0e16",
+   "heading": "#d83441",
+   "link": "#8041d8",
+   "accent": "#d83441"
+  }
+ },
+ {
+  "id": "dracula",
+  "name": "Dracula",
+  "dark": true,
+  "swatch": {
+   "bg": "#282a36",
+   "heading": "#bd93f9",
+   "link": "#8be9fd",
+   "accent": "#bd93f9"
+  }
+ },
+ {
+  "id": "dracula_at_night",
+  "name": "Dracula At Night",
+  "dark": true,
+  "swatch": {
+   "bg": "#0e1419",
+   "heading": "#bd93f9",
+   "link": "#8be9fd",
+   "accent": "#bd93f9"
+  }
+ },
+ {
+  "id": "earl_grey",
+  "name": "Earl Grey",
+  "dark": true,
+  "swatch": {
+   "bg": "#101010",
+   "heading": "#b59efc",
+   "link": "#e5c890",
+   "accent": "#e5c890"
+  }
+ },
+ {
+  "id": "eiffel",
+  "name": "Eiffel",
+  "dark": false,
+  "swatch": {
+   "bg": "#ffffff",
+   "heading": "#0c07ff",
+   "link": "#d80800",
+   "accent": "#d80800"
+  }
+ },
+ {
+  "id": "eldritch",
+  "name": "Eldritch",
+  "dark": true,
+  "swatch": {
+   "bg": "#323449",
+   "heading": "#a48cf2",
+   "link": "#04d1f9",
+   "accent": "#a48cf2"
+  }
+ },
+ {
+  "id": "eldritch_transparent",
+  "name": "Eldritch Transparent",
+  "dark": true,
+  "swatch": {
+   "bg": "#323449",
+   "heading": "#a48cf2",
+   "link": "#04d1f9",
+   "accent": "#a48cf2"
+  }
+ },
+ {
+  "id": "emacs",
+  "name": "Emacs",
+  "dark": false,
+  "swatch": {
+   "bg": "#ffffff",
+   "heading": "#8c7600",
+   "link": "#3a5fcd",
+   "accent": "#828282"
+  }
+ },
+ {
+  "id": "everblush",
+  "name": "Everblush",
+  "dark": true,
+  "swatch": {
+   "bg": "#141b1e",
+   "heading": "#67b0e8",
+   "link": "#8ccf7e",
+   "accent": "#6cbfbf"
+  }
+ },
+ {
+  "id": "everforest_dark",
+  "name": "Everforest Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#2d353b",
+   "heading": "#e67e80",
+   "link": "#7fbbb3",
+   "accent": "#859289"
+  }
+ },
+ {
+  "id": "everforest_light",
+  "name": "Everforest Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#fdf6e3",
+   "heading": "#d34846",
+   "link": "#317ea7",
+   "accent": "#7d877b"
+  }
+ },
+ {
+  "id": "faded-prism",
+  "name": "Faded Prism",
+  "dark": true,
+  "swatch": {
+   "bg": "#252525",
+   "heading": "#fffd78",
+   "link": "#abff8d",
+   "accent": "#fffd78"
+  }
+ },
+ {
+  "id": "ferra",
+  "name": "Ferra",
+  "dark": true,
+  "swatch": {
+   "bg": "#2b292d",
+   "heading": "#b1b695",
+   "link": "#f6b6c9",
+   "accent": "#b1b695"
+  }
+ },
+ {
+  "id": "flatwhite",
+  "name": "Flatwhite",
+  "dark": false,
+  "swatch": {
+   "bg": "#f7f3ee",
+   "heading": "#614c61",
+   "link": "#4c5361",
+   "accent": "#614c61"
+  }
+ },
+ {
+  "id": "fleet_dark",
+  "name": "Fleet Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#181818",
+   "heading": "#82d2ce",
+   "link": "#e394dc",
+   "accent": "#e394dc"
+  }
+ },
+ {
+  "id": "flexoki_dark",
+  "name": "Flexoki Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#100f0f",
+   "heading": "#da702c",
+   "link": "#4385be",
+   "accent": "#4385be"
+  }
+ },
+ {
+  "id": "flexoki_light",
+  "name": "Flexoki Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#fffcf0",
+   "heading": "#bc5215",
+   "link": "#205ea6",
+   "accent": "#205ea6"
+  }
+ },
+ {
+  "id": "flynt_dark",
+  "name": "Flynt Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#100e0c",
+   "heading": "#f5edd8",
+   "link": "#48a8a0",
+   "accent": "#93ae42"
+  }
+ },
+ {
+  "id": "flynt_light",
+  "name": "Flynt Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#fffcef",
+   "heading": "#1a1512",
+   "link": "#3d8f88",
+   "accent": "#7d9438"
+  }
+ },
+ {
+  "id": "focus_nova",
+  "name": "Focus Nova",
+  "dark": true,
+  "swatch": {
+   "bg": "#1e1e2e",
+   "heading": "#cba6f7",
+   "link": "#94e2d5",
+   "accent": "#cba6f7"
+  }
+ },
+ {
+  "id": "github_dark",
+  "name": "GitHub Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#0d1117",
+   "heading": "#79c0ff",
+   "link": "#a5d6ff",
+   "accent": "#79c0ff"
+  }
+ },
+ {
+  "id": "github_dark_colorblind",
+  "name": "GitHub Dark Colorblind",
+  "dark": true,
+  "swatch": {
+   "bg": "#0d1117",
+   "heading": "#79c0ff",
+   "link": "#a5d6ff",
+   "accent": "#79c0ff"
+  }
+ },
+ {
+  "id": "github_dark_dimmed",
+  "name": "GitHub Dark Dimmed",
+  "dark": true,
+  "swatch": {
+   "bg": "#22272e",
+   "heading": "#6cb6ff",
+   "link": "#96d0ff",
+   "accent": "#6cb6ff"
+  }
+ },
+ {
+  "id": "github_dark_high_contrast",
+  "name": "GitHub Dark High Contrast",
+  "dark": true,
+  "swatch": {
+   "bg": "#0a0c10",
+   "heading": "#91cbff",
+   "link": "#addcff",
+   "accent": "#91cbff"
+  }
+ },
+ {
+  "id": "github_dark_tritanopia",
+  "name": "GitHub Dark Tritanopia",
+  "dark": true,
+  "swatch": {
+   "bg": "#0d1117",
+   "heading": "#79c0ff",
+   "link": "#a5d6ff",
+   "accent": "#79c0ff"
+  }
+ },
+ {
+  "id": "github_light",
+  "name": "GitHub Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#ffffff",
+   "heading": "#0550ae",
+   "link": "#0a3069",
+   "accent": "#0550ae"
+  }
+ },
+ {
+  "id": "github_light_colorblind",
+  "name": "GitHub Light Colorblind",
+  "dark": false,
+  "swatch": {
+   "bg": "#ffffff",
+   "heading": "#0550ae",
+   "link": "#0a3069",
+   "accent": "#0550ae"
+  }
+ },
+ {
+  "id": "github_light_high_contrast",
+  "name": "GitHub Light High Contrast",
+  "dark": false,
+  "swatch": {
+   "bg": "#ffffff",
+   "heading": "#023b95",
+   "link": "#032563",
+   "accent": "#023b95"
+  }
+ },
+ {
+  "id": "github_light_tritanopia",
+  "name": "GitHub Light Tritanopia",
+  "dark": false,
+  "swatch": {
+   "bg": "#ffffff",
+   "heading": "#0550ae",
+   "link": "#0a3069",
+   "accent": "#0550ae"
+  }
+ },
+ {
+  "id": "gruber-darker",
+  "name": "Gruber Darker",
+  "dark": true,
+  "swatch": {
+   "bg": "#181818",
+   "heading": "#8ec07c",
+   "link": "#b8bb26",
+   "accent": "#8ec07c"
+  }
+ },
+ {
+  "id": "gruvbox",
+  "name": "Gruvbox",
+  "dark": true,
+  "swatch": {
+   "bg": "#282828",
+   "heading": "#8ec07c",
+   "link": "#b8bb26",
+   "accent": "#fb4934"
+  }
+ },
+ {
+  "id": "gruvbox-material",
+  "name": "Gruvbox Material",
+  "dark": true,
+  "swatch": {
+   "bg": "#282828",
+   "heading": "#ea6962",
+   "link": "#7daea3",
+   "accent": "#ea6962"
+  }
+ },
+ {
+  "id": "gruvbox_dark_hard",
+  "name": "Gruvbox Dark Hard",
+  "dark": true,
+  "swatch": {
+   "bg": "#1d2021",
+   "heading": "#8ec07c",
+   "link": "#b8bb26",
+   "accent": "#fb4934"
+  }
+ },
+ {
+  "id": "gruvbox_dark_soft",
+  "name": "Gruvbox Dark Soft",
+  "dark": true,
+  "swatch": {
+   "bg": "#32302f",
+   "heading": "#8ec07c",
+   "link": "#b8bb26",
+   "accent": "#fb4934"
+  }
+ },
+ {
+  "id": "gruvbox_light",
+  "name": "Gruvbox Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#fbf1c7",
+   "heading": "#427b58",
+   "link": "#79740e",
+   "accent": "#427b58"
+  }
+ },
+ {
+  "id": "gruvbox_light_hard",
+  "name": "Gruvbox Light Hard",
+  "dark": false,
+  "swatch": {
+   "bg": "#f9f5d7",
+   "heading": "#427b58",
+   "link": "#79740e",
+   "accent": "#427b58"
+  }
+ },
+ {
+  "id": "gruvbox_light_soft",
+  "name": "Gruvbox Light Soft",
+  "dark": false,
+  "swatch": {
+   "bg": "#f2e5bc",
+   "heading": "#427b58",
+   "link": "#79740e",
+   "accent": "#427b58"
+  }
+ },
+ {
+  "id": "gruvbox_material_dark_hard",
+  "name": "Gruvbox Material Dark Hard",
+  "dark": true,
+  "swatch": {
+   "bg": "#1d2021",
+   "heading": "#ea6962",
+   "link": "#7daea3",
+   "accent": "#ea6962"
+  }
+ },
+ {
+  "id": "gruvbox_material_dark_medium",
+  "name": "Gruvbox Material Dark Medium",
+  "dark": true,
+  "swatch": {
+   "bg": "#282828",
+   "heading": "#ea6962",
+   "link": "#7daea3",
+   "accent": "#ea6962"
+  }
+ },
+ {
+  "id": "gruvbox_material_dark_soft",
+  "name": "Gruvbox Material Dark Soft",
+  "dark": true,
+  "swatch": {
+   "bg": "#32302f",
+   "heading": "#ea6962",
+   "link": "#7daea3",
+   "accent": "#ea6962"
+  }
+ },
+ {
+  "id": "gruvbox_material_light_hard",
+  "name": "Gruvbox Material Light Hard",
+  "dark": false,
+  "swatch": {
+   "bg": "#f9f5d7",
+   "heading": "#c14a4a",
+   "link": "#45707a",
+   "accent": "#6c782e"
+  }
+ },
+ {
+  "id": "gruvbox_material_light_medium",
+  "name": "Gruvbox Material Light Medium",
+  "dark": false,
+  "swatch": {
+   "bg": "#fbf1c7",
+   "heading": "#c14a4a",
+   "link": "#45707a",
+   "accent": "#6c782e"
+  }
+ },
+ {
+  "id": "gruvbox_material_light_soft",
+  "name": "Gruvbox Material Light Soft",
+  "dark": false,
+  "swatch": {
+   "bg": "#f2e5bc",
+   "heading": "#c14a4a",
+   "link": "#45707a",
+   "accent": "#6c782e"
+  }
+ },
+ {
+  "id": "hazyland",
+  "name": "Hazyland",
+  "dark": true,
+  "swatch": {
+   "bg": "#171219",
+   "heading": "#eee4ff",
+   "link": "#ff8fc4",
+   "accent": "#ff8fc4"
+  }
+ },
+ {
+  "id": "heisenberg",
+  "name": "Heisenberg",
+  "dark": true,
+  "swatch": {
+   "bg": "#000000",
+   "heading": "#f7b90c",
+   "link": "#32c9fa",
+   "accent": "#f7b90c"
+  }
+ },
+ {
+  "id": "hex_lavender",
+  "name": "Hex Lavender",
+  "dark": true,
+  "swatch": {
+   "bg": "#181a17",
+   "heading": "#8e80de",
+   "link": "#a0c7cf",
+   "accent": "#797185"
+  }
+ },
+ {
+  "id": "hex_poison",
+  "name": "Hex Poison",
+  "dark": true,
+  "swatch": {
+   "bg": "#1e1f1b",
+   "heading": "#b1b354",
+   "link": "#6fd7a8",
+   "accent": "#73786c"
+  }
+ },
+ {
+  "id": "hex_steel",
+  "name": "Hex Steel",
+  "dark": true,
+  "swatch": {
+   "bg": "#1d1e1b",
+   "heading": "#d85c60",
+   "link": "#f78c5e",
+   "accent": "#d85c60"
+  }
+ },
+ {
+  "id": "hex_toxic",
+  "name": "Hex Toxic",
+  "dark": true,
+  "swatch": {
+   "bg": "#1b2a32",
+   "heading": "#eeac90",
+   "link": "#ffbf52",
+   "accent": "#eeac90"
+  }
+ },
+ {
+  "id": "horizon-dark",
+  "name": "Horizon Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#1c1e26",
+   "heading": "#ee64ae",
+   "link": "#25b2bc",
+   "accent": "#ee64ae"
+  }
+ },
+ {
+  "id": "iceberg-dark",
+  "name": "Iceberg Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#161822",
+   "heading": "#85a0c7",
+   "link": "#89b9c2",
+   "accent": "#85a0c7"
+  }
+ },
+ {
+  "id": "iceberg-light",
+  "name": "Iceberg Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#e9e9ed",
+   "heading": "#2e539e",
+   "link": "#3f84a6",
+   "accent": "#3f84a6"
+  }
+ },
+ {
+  "id": "ingrid",
+  "name": "Ingrid",
+  "dark": false,
+  "swatch": {
+   "bg": "#fffcfd",
+   "heading": "#2f6fd8",
+   "link": "#977d00",
+   "accent": "#2f6fd8"
+  }
+ },
+ {
+  "id": "iroaseta",
+  "name": "Iroaseta",
+  "dark": true,
+  "swatch": {
+   "bg": "#0d1117",
+   "heading": "#ff9000",
+   "link": "#d2a8ff",
+   "accent": "#ff9000"
+  }
+ },
+ {
+  "id": "jellybeans",
+  "name": "Jellybeans",
+  "dark": true,
+  "swatch": {
+   "bg": "#151515",
+   "heading": "#8197bf",
+   "link": "#84a775",
+   "accent": "#84a775"
+  }
+ },
+ {
+  "id": "jetbrains_cyan_light",
+  "name": "Jetbrains Cyan Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#f2f3f7",
+   "heading": "#660e7a",
+   "link": "#343a54",
+   "accent": "#00733b"
+  }
+ },
+ {
+  "id": "jetbrains_dark",
+  "name": "Jetbrains Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#1e1f22",
+   "heading": "#c77dbb",
+   "link": "#57aaf7",
+   "accent": "#2aacb8"
+  }
+ },
+ {
+  "id": "kanagawa",
+  "name": "Kanagawa",
+  "dark": true,
+  "swatch": {
+   "bg": "#1f1f28",
+   "heading": "#9cabca",
+   "link": "#a3d4d5",
+   "accent": "#98bb6c"
+  }
+ },
+ {
+  "id": "kanagawa-dragon",
+  "name": "Kanagawa Dragon",
+  "dark": true,
+  "swatch": {
+   "bg": "#181616",
+   "heading": "#9cabca",
+   "link": "#a292a3",
+   "accent": "#8a9a7b"
+  }
+ },
+ {
+  "id": "kanagawa-lotus",
+  "name": "Kanagawa Lotus",
+  "dark": false,
+  "swatch": {
+   "bg": "#fdfcfb",
+   "heading": "#223249",
+   "link": "#0081a7",
+   "accent": "#00612d"
+  }
+ },
+ {
+  "id": "kaolin-dark",
+  "name": "Kaolin Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#18181b",
+   "heading": "#80bcb6",
+   "link": "#dbac66",
+   "accent": "#68f3ca"
+  }
+ },
+ {
+  "id": "kaolin-light",
+  "name": "Kaolin Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#edeeeb",
+   "heading": "#6d46e3",
+   "link": "#3b84cc",
+   "accent": "#845a84"
+  }
+ },
+ {
+  "id": "kaolin-valley-dark",
+  "name": "Kaolin Valley Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#262221",
+   "heading": "#eed891",
+   "link": "#ef6787",
+   "accent": "#eed891"
+  }
+ },
+ {
+  "id": "kinda_nvim",
+  "name": "Kinda Nvim",
+  "dark": true,
+  "swatch": {
+   "bg": "#00120c",
+   "heading": "#12b27d",
+   "link": "#6797c2",
+   "accent": "#12b27d"
+  }
+ },
+ {
+  "id": "kinda_nvim_light",
+  "name": "Kinda Nvim Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#f2f5f4",
+   "heading": "#008c5d",
+   "link": "#2470b2",
+   "accent": "#008c5d"
+  }
+ },
+ {
+  "id": "lapis_aquamarine",
+  "name": "Lapis Aquamarine",
+  "dark": true,
+  "swatch": {
+   "bg": "#1b1f27",
+   "heading": "#46d9ff",
+   "link": "#84fcd4",
+   "accent": "#d483fc"
+  }
+ },
+ {
+  "id": "material_darker",
+  "name": "Material Darker",
+  "dark": true,
+  "swatch": {
+   "bg": "#212121",
+   "heading": "#89ddff",
+   "link": "#c3e88d",
+   "accent": "#89ddff"
+  }
+ },
+ {
+  "id": "material_deep_ocean",
+  "name": "Material Deep Ocean",
+  "dark": true,
+  "swatch": {
+   "bg": "#0f111a",
+   "heading": "#89ddff",
+   "link": "#c3e88d",
+   "accent": "#89ddff"
+  }
+ },
+ {
+  "id": "material_oceanic",
+  "name": "Material Oceanic",
+  "dark": true,
+  "swatch": {
+   "bg": "#25363b",
+   "heading": "#89ddff",
+   "link": "#c3e88d",
+   "accent": "#89ddff"
+  }
+ },
+ {
+  "id": "material_palenight",
+  "name": "Material Palenight",
+  "dark": true,
+  "swatch": {
+   "bg": "#292d3e",
+   "heading": "#89ddff",
+   "link": "#c3e88d",
+   "accent": "#89ddff"
+  }
+ },
+ {
+  "id": "meliora",
+  "name": "Meliora",
+  "dark": true,
+  "swatch": {
+   "bg": "#1c1917",
+   "heading": "#cbab8a",
+   "link": "#707035",
+   "accent": "#a49db9"
+  }
+ },
+ {
+  "id": "mellow",
+  "name": "Mellow",
+  "dark": true,
+  "swatch": {
+   "bg": "#161617",
+   "heading": "#b9aeda",
+   "link": "#90b99f",
+   "accent": "#b9aeda"
+  }
+ },
+ {
+  "id": "merionette",
+  "name": "Merionette",
+  "dark": true,
+  "swatch": {
+   "bg": "#190f0f",
+   "heading": "#eb842b",
+   "link": "#65aba3",
+   "accent": "#d95362"
+  }
+ },
+ {
+  "id": "modus_operandi",
+  "name": "Modus Operandi",
+  "dark": false,
+  "swatch": {
+   "bg": "#ffffff",
+   "heading": "#000000",
+   "link": "#005e8b",
+   "accent": "#0000b0"
+  }
+ },
+ {
+  "id": "modus_operandi_deuteranopia",
+  "name": "Modus Operandi Deuteranopia",
+  "dark": false,
+  "swatch": {
+   "bg": "#ffffff",
+   "heading": "#000000",
+   "link": "#005e8b",
+   "accent": "#0000b0"
+  }
+ },
+ {
+  "id": "modus_operandi_tinted",
+  "name": "Modus Operandi Tinted",
+  "dark": false,
+  "swatch": {
+   "bg": "#fbf7f0",
+   "heading": "#000000",
+   "link": "#005e8b",
+   "accent": "#0000b0"
+  }
+ },
+ {
+  "id": "modus_operandi_tritanopia",
+  "name": "Modus Operandi Tritanopia",
+  "dark": false,
+  "swatch": {
+   "bg": "#ffffff",
+   "heading": "#000000",
+   "link": "#005f5f",
+   "accent": "#00663f"
+  }
+ },
+ {
+  "id": "modus_vivendi",
+  "name": "Modus Vivendi",
+  "dark": true,
+  "swatch": {
+   "bg": "#000000",
+   "heading": "#ffffff",
+   "link": "#00d3d0",
+   "accent": "#00bcff"
+  }
+ },
+ {
+  "id": "modus_vivendi_deuteranopia",
+  "name": "Modus Vivendi Deuteranopia",
+  "dark": true,
+  "swatch": {
+   "bg": "#000000",
+   "heading": "#ffffff",
+   "link": "#00d3d0",
+   "accent": "#00bcff"
+  }
+ },
+ {
+  "id": "modus_vivendi_tinted",
+  "name": "Modus Vivendi Tinted",
+  "dark": true,
+  "swatch": {
+   "bg": "#0d0e1c",
+   "heading": "#ffffff",
+   "link": "#00d3d0",
+   "accent": "#00bcff"
+  }
+ },
+ {
+  "id": "modus_vivendi_tritanopia",
+  "name": "Modus Vivendi Tritanopia",
+  "dark": true,
+  "swatch": {
+   "bg": "#000000",
+   "heading": "#ffffff",
+   "link": "#6ae4b9",
+   "accent": "#88ca9f"
+  }
+ },
+ {
+  "id": "molokai",
+  "name": "Molokai",
+  "dark": true,
+  "swatch": {
+   "bg": "#1b1d1e",
+   "heading": "#2f6fd8",
+   "link": "#d8b200",
+   "accent": "#1c8f4d"
+  }
+ },
+ {
+  "id": "monokai",
+  "name": "Monokai",
+  "dark": true,
+  "swatch": {
+   "bg": "#272822",
+   "heading": "#4e85de",
+   "link": "#d8b200",
+   "accent": "#1c8f4d"
+  }
+ },
+ {
+  "id": "monokai_aqua",
+  "name": "Monokai Aqua",
+  "dark": true,
+  "swatch": {
+   "bg": "#272822",
+   "heading": "#4e85de",
+   "link": "#d8b200",
+   "accent": "#1c8f4d"
+  }
+ },
+ {
+  "id": "monokai_pro",
+  "name": "Monokai Pro",
+  "dark": true,
+  "swatch": {
+   "bg": "#2d2a2e",
+   "heading": "#a9dc76",
+   "link": "#fc9867",
+   "accent": "#a9dc76"
+  }
+ },
+ {
+  "id": "monokai_pro_machine",
+  "name": "Monokai Pro Machine",
+  "dark": true,
+  "swatch": {
+   "bg": "#273136",
+   "heading": "#a2e57b",
+   "link": "#ffb270",
+   "accent": "#a2e57b"
+  }
+ },
+ {
+  "id": "monokai_pro_octagon",
+  "name": "Monokai Pro Octagon",
+  "dark": true,
+  "swatch": {
+   "bg": "#282a3a",
+   "heading": "#bad761",
+   "link": "#ff9b5e",
+   "accent": "#bad761"
+  }
+ },
+ {
+  "id": "monokai_pro_ristretto",
+  "name": "Monokai Pro Ristretto",
+  "dark": true,
+  "swatch": {
+   "bg": "#2c2525",
+   "heading": "#adda78",
+   "link": "#f38d70",
+   "accent": "#adda78"
+  }
+ },
+ {
+  "id": "monokai_pro_spectrum",
+  "name": "Monokai Pro Spectrum",
+  "dark": true,
+  "swatch": {
+   "bg": "#222222",
+   "heading": "#7bd88f",
+   "link": "#fd9353",
+   "accent": "#7bd88f"
+  }
+ },
+ {
+  "id": "monokai_soda",
+  "name": "Monokai Soda",
+  "dark": true,
+  "swatch": {
+   "bg": "#191919",
+   "heading": "#a6e22e",
+   "link": "#fd971f",
+   "accent": "#a6e22e"
+  }
+ },
+ {
+  "id": "naysayer",
+  "name": "Naysayer",
+  "dark": true,
+  "swatch": {
+   "bg": "#062329",
+   "heading": "#ffffff",
+   "link": "#ffffff",
+   "accent": "#ffffff"
+  }
+ },
+ {
+  "id": "neonotte",
+  "name": "Neonotte",
+  "dark": true,
+  "swatch": {
+   "bg": "#151520",
+   "heading": "#abb7ff",
+   "link": "#f8ded9",
+   "accent": "#abb7ff"
+  }
+ },
+ {
+  "id": "neonotte84",
+  "name": "Neonotte84",
+  "dark": true,
+  "swatch": {
+   "bg": "#151520",
+   "heading": "#abb7ff",
+   "link": "#f8ded9",
+   "accent": "#abb7ff"
+  }
+ },
+ {
+  "id": "new_moon",
+  "name": "New Moon",
+  "dark": true,
+  "swatch": {
+   "bg": "#2d2d2d",
+   "heading": "#6ab0f3",
+   "link": "#fca369",
+   "accent": "#fca369"
+  }
+ },
+ {
+  "id": "night_owl",
+  "name": "Night Owl",
+  "dark": true,
+  "swatch": {
+   "bg": "#011627",
+   "heading": "#82aaff",
+   "link": "#637777",
+   "accent": "#82aaff"
+  }
+ },
+ {
+  "id": "night_rider",
+  "name": "Night Rider",
+  "dark": true,
+  "swatch": {
+   "bg": "#1e1c3f",
+   "heading": "#ac70fc",
+   "link": "#d8608c",
+   "accent": "#e591ff"
+  }
+ },
+ {
+  "id": "nightfox",
+  "name": "Nightfox",
+  "dark": true,
+  "swatch": {
+   "bg": "#192330",
+   "heading": "#dbc074",
+   "link": "#e0c989",
+   "accent": "#9d79d6"
+  }
+ },
+ {
+  "id": "noctis",
+  "name": "Noctis",
+  "dark": true,
+  "swatch": {
+   "bg": "#00262a",
+   "heading": "#df769b",
+   "link": "#918cff",
+   "accent": "#df769b"
+  }
+ },
+ {
+  "id": "noctis_bordo",
+  "name": "Noctis Bordo",
+  "dark": true,
+  "swatch": {
+   "bg": "#322a2d",
+   "heading": "#16a3b6",
+   "link": "#d5971a",
+   "accent": "#16a3b6"
+  }
+ },
+ {
+  "id": "nord",
+  "name": "Nord",
+  "dark": true,
+  "swatch": {
+   "bg": "#2e3440",
+   "heading": "#88c0d0",
+   "link": "#88c0d0",
+   "accent": "#8fbcbb"
+  }
+ },
+ {
+  "id": "nord-night",
+  "name": "Nord Night",
+  "dark": true,
+  "swatch": {
+   "bg": "#252933",
+   "heading": "#88c0d0",
+   "link": "#88c0d0",
+   "accent": "#88c0d0"
+  }
+ },
+ {
+  "id": "nord_light",
+  "name": "Nord Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#eceff4",
+   "heading": "#2e3440",
+   "link": "#4c566a",
+   "accent": "#5e81ac"
+  }
+ },
+ {
+  "id": "nvchad_solarized_dark",
+  "name": "Nvchad Solarized Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#002b36",
+   "heading": "#268bd2",
+   "link": "#b58900",
+   "accent": "#268bd2"
+  }
+ },
+ {
+  "id": "nvim-dark",
+  "name": "Nvim Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#14161b",
+   "heading": "#e0e2ea",
+   "link": "#8cf8f7",
+   "accent": "#e0e2ea"
+  }
+ },
+ {
+  "id": "nyxvamp-obsidian",
+  "name": "Nyxvamp Obsidian",
+  "dark": true,
+  "swatch": {
+   "bg": "#000a0f",
+   "heading": "#f5c2e7",
+   "link": "#7fafd7",
+   "accent": "#76738b"
+  }
+ },
+ {
+  "id": "nyxvamp-radiance",
+  "name": "Nyxvamp Radiance",
+  "dark": false,
+  "swatch": {
+   "bg": "#f7f7ff",
+   "heading": "#9655ff",
+   "link": "#005f87",
+   "accent": "#5a5570"
+  }
+ },
+ {
+  "id": "nyxvamp-transparent",
+  "name": "Nyxvamp Transparent",
+  "dark": true,
+  "swatch": {
+   "bg": "#1e1e2e",
+   "heading": "#f5c2e7",
+   "link": "#96cdfb",
+   "accent": "#848098"
+  }
+ },
+ {
+  "id": "nyxvamp-veil",
+  "name": "Nyxvamp Veil",
+  "dark": true,
+  "swatch": {
+   "bg": "#1e1e2e",
+   "heading": "#f5c2e7",
+   "link": "#96cdfb",
+   "accent": "#848098"
+  }
+ },
+ {
+  "id": "ocean-space",
+  "name": "Ocean Space",
+  "dark": true,
+  "swatch": {
+   "bg": "#0f111a",
+   "heading": "#f92672",
+   "link": "#c74ded",
+   "accent": "#14b37d"
+  }
+ },
+ {
+  "id": "omicron_dark",
+  "name": "Omicron Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#000000",
+   "heading": "#cccccc",
+   "link": "#11aaff",
+   "accent": "#cccccc"
+  }
+ },
+ {
+  "id": "omicron_light",
+  "name": "Omicron Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#eeeeee",
+   "heading": "#333333",
+   "link": "#0077b2",
+   "accent": "#336633"
+  }
+ },
+ {
+  "id": "onedark",
+  "name": "One Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#282c34",
+   "heading": "#e06c75",
+   "link": "#56b6c2",
+   "accent": "#e06c75"
+  }
+ },
+ {
+  "id": "onedark_vibrant",
+  "name": "Onedark Vibrant",
+  "dark": true,
+  "swatch": {
+   "bg": "#282c34",
+   "heading": "#3fb8ff",
+   "link": "#2dd4da",
+   "accent": "#ff9f40"
+  }
+ },
+ {
+  "id": "onedarker",
+  "name": "Onedarker",
+  "dark": true,
+  "swatch": {
+   "bg": "#16181a",
+   "heading": "#d05c65",
+   "link": "#519fdf",
+   "accent": "#d05c65"
+  }
+ },
+ {
+  "id": "onedarker_vibrant",
+  "name": "Onedarker Vibrant",
+  "dark": true,
+  "swatch": {
+   "bg": "#16181a",
+   "heading": "#2fa5f0",
+   "link": "#1abde0",
+   "accent": "#ff8f35"
+  }
+ },
+ {
+  "id": "onelight",
+  "name": "One Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#fafafa",
+   "heading": "#d50000",
+   "link": "#0086c1",
+   "accent": "#795548"
+  }
+ },
+ {
+  "id": "papercolor-dark",
+  "name": "PaperColor Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#1c1c1c",
+   "heading": "#ffaf00",
+   "link": "#00afaf",
+   "accent": "#ffaf00"
+  }
+ },
+ {
+  "id": "papercolor-light",
+  "name": "PaperColor Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#eeeeee",
+   "heading": "#d75f00",
+   "link": "#005faf",
+   "accent": "#5f8700"
+  }
+ },
+ {
+  "id": "penumbra+",
+  "name": "Penumbra+",
+  "dark": true,
+  "swatch": {
+   "bg": "#24272b",
+   "heading": "#cecece",
+   "link": "#d080b6",
+   "accent": "#cecece"
+  }
+ },
+ {
+  "id": "poimandres",
+  "name": "Poimandres",
+  "dark": true,
+  "swatch": {
+   "bg": "#1b1e28",
+   "heading": "#5de4c7",
+   "link": "#add7ff",
+   "accent": "#5de4c7"
+  }
+ },
+ {
+  "id": "poimandres_storm",
+  "name": "Poimandres Storm",
+  "dark": true,
+  "swatch": {
+   "bg": "#252b37",
+   "heading": "#5de4c7",
+   "link": "#add7ff",
+   "accent": "#5de4c7"
+  }
+ },
+ {
+  "id": "pop-dark",
+  "name": "Pop Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#3e3b39",
+   "heading": "#73c48f",
+   "link": "#6dd2fa",
+   "accent": "#73c48f"
+  }
+ },
+ {
+  "id": "quiet_light",
+  "name": "Quiet Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#f5f5f5",
+   "heading": "#aa3731",
+   "link": "#4b69c6",
+   "accent": "#9c5d27"
+  }
+ },
+ {
+  "id": "rasmus",
+  "name": "Rasmus",
+  "dark": true,
+  "swatch": {
+   "bg": "#1a1a19",
+   "heading": "#d1d1d1",
+   "link": "#7bb099",
+   "accent": "#d1d1d1"
+  }
+ },
+ {
+  "id": "rose_pine",
+  "name": "Rose Pine",
+  "dark": true,
+  "swatch": {
+   "bg": "#191724",
+   "heading": "#c4a7e7",
+   "link": "#c4a7e7",
+   "accent": "#908caa"
+  }
+ },
+ {
+  "id": "rose_pine_dawn",
+  "name": "Rose Pine Dawn",
+  "dark": false,
+  "swatch": {
+   "bg": "#faf4ed",
+   "heading": "#907aa9",
+   "link": "#907aa9",
+   "accent": "#797593"
+  }
+ },
+ {
+  "id": "rose_pine_moon",
+  "name": "Rose Pine Moon",
+  "dark": true,
+  "swatch": {
+   "bg": "#232136",
+   "heading": "#c4a7e7",
+   "link": "#c4a7e7",
+   "accent": "#908caa"
+  }
+ },
+ {
+  "id": "seoul256-dark",
+  "name": "Seoul256 Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#3a3a3a",
+   "heading": "#d7afaf",
+   "link": "#87d7d7",
+   "accent": "#d7afaf"
+  }
+ },
+ {
+  "id": "seoul256-dark-hard",
+  "name": "Seoul256 Dark Hard",
+  "dark": true,
+  "swatch": {
+   "bg": "#1c1c1c",
+   "heading": "#d7afaf",
+   "link": "#87d7d7",
+   "accent": "#d7afaf"
+  }
+ },
+ {
+  "id": "seoul256-dark-soft",
+  "name": "Seoul256 Dark Soft",
+  "dark": true,
+  "swatch": {
+   "bg": "#4e4e4e",
+   "heading": "#d7afaf",
+   "link": "#87d7d7",
+   "accent": "#d7afaf"
+  }
+ },
+ {
+  "id": "seoul256-light",
+  "name": "Seoul256 Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#dadada",
+   "heading": "#766060",
+   "link": "#4a7676",
+   "accent": "#776034"
+  }
+ },
+ {
+  "id": "seoul256-light-hard",
+  "name": "Seoul256 Light Hard",
+  "dark": false,
+  "swatch": {
+   "bg": "#eeeeee",
+   "heading": "#967a7a",
+   "link": "#4a7676",
+   "accent": "#977a42"
+  }
+ },
+ {
+  "id": "seoul256-light-soft",
+  "name": "Seoul256 Light Soft",
+  "dark": false,
+  "swatch": {
+   "bg": "#d0d0d0",
+   "heading": "#766060",
+   "link": "#4a7676",
+   "accent": "#776034"
+  }
+ },
+ {
+  "id": "serika-dark",
+  "name": "Serika Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#323437",
+   "heading": "#be9ec9",
+   "link": "#1f9ca8",
+   "accent": "#be9ec9"
+  }
+ },
+ {
+  "id": "serika-light",
+  "name": "Serika Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#d1d0c5",
+   "heading": "#5a4066",
+   "link": "#166d76",
+   "accent": "#5a4066"
+  }
+ },
+ {
+  "id": "sidra",
+  "name": "Sidra",
+  "dark": true,
+  "swatch": {
+   "bg": "#232323",
+   "heading": "#ff69b4",
+   "link": "#3876bf",
+   "accent": "#808080"
+  }
+ },
+ {
+  "id": "snazzy",
+  "name": "Snazzy",
+  "dark": true,
+  "swatch": {
+   "bg": "#282a36",
+   "heading": "#bd93f9",
+   "link": "#9aedfe",
+   "accent": "#bd93f9"
+  }
+ },
+ {
+  "id": "solarized_dark",
+  "name": "Solarized Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#002b36",
+   "heading": "#268bd2",
+   "link": "#b58900",
+   "accent": "#268bd2"
+  }
+ },
+ {
+  "id": "solarized_light",
+  "name": "Solarized Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#fdf6e3",
+   "heading": "#268bd2",
+   "link": "#9a7400",
+   "accent": "#268bd2"
+  }
+ },
+ {
+  "id": "sonokai",
+  "name": "Sonokai",
+  "dark": true,
+  "swatch": {
+   "bg": "#2c2e34",
+   "heading": "#fc5d7c",
+   "link": "#76cce0",
+   "accent": "#fc5d7c"
+  }
+ },
+ {
+  "id": "spacebones_light",
+  "name": "Spacebones Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#fbf8ef",
+   "heading": "#3a81c3",
+   "link": "#967f19",
+   "accent": "#589619"
+  }
+ },
+ {
+  "id": "starlight",
+  "name": "Starlight",
+  "dark": true,
+  "swatch": {
+   "bg": "#242424",
+   "heading": "#ffffff",
+   "link": "#e9e836",
+   "accent": "#35d450"
+  }
+ },
+ {
+  "id": "sunset",
+  "name": "Sunset",
+  "dark": true,
+  "swatch": {
+   "bg": "#111111",
+   "heading": "#ee7711",
+   "link": "#77aaaa",
+   "accent": "#eeaaaa"
+  }
+ },
+ {
+  "id": "tokyonight",
+  "name": "Tokyo Night",
+  "dark": true,
+  "swatch": {
+   "bg": "#1a1b26",
+   "heading": "#7aa2f7",
+   "link": "#1abc9c",
+   "accent": "#1abc9c"
+  }
+ },
+ {
+  "id": "tokyonight_day",
+  "name": "Tokyonight Day",
+  "dark": false,
+  "swatch": {
+   "bg": "#e1e2e7",
+   "heading": "#276ac6",
+   "link": "#118c74",
+   "accent": "#118c74"
+  }
+ },
+ {
+  "id": "tokyonight_moon",
+  "name": "Tokyo Night Moon",
+  "dark": true,
+  "swatch": {
+   "bg": "#222436",
+   "heading": "#82aaff",
+   "link": "#4fd6be",
+   "accent": "#82aaff"
+  }
+ },
+ {
+  "id": "tokyonight_storm",
+  "name": "Tokyo Night Storm",
+  "dark": true,
+  "swatch": {
+   "bg": "#24283b",
+   "heading": "#7aa2f7",
+   "link": "#1abc9c",
+   "accent": "#1abc9c"
+  }
+ },
+ {
+  "id": "varua",
+  "name": "Varua",
+  "dark": true,
+  "swatch": {
+   "bg": "#282828",
+   "heading": "#e67e80",
+   "link": "#7fbbb3",
+   "accent": "#e67e80"
+  }
+ },
+ {
+  "id": "vesper",
+  "name": "Vesper",
+  "dark": true,
+  "swatch": {
+   "bg": "#101010",
+   "heading": "#a0a0a0",
+   "link": "#99ffe4",
+   "accent": "#ffc799"
+  }
+ },
+ {
+  "id": "vim_dark_high_contrast",
+  "name": "Vim Dark High Contrast",
+  "dark": true,
+  "swatch": {
+   "bg": "#000000",
+   "heading": "#d97917",
+   "link": "#7fd3ed",
+   "accent": "#ed5f74"
+  }
+ },
+ {
+  "id": "voxed",
+  "name": "Voxed",
+  "dark": true,
+  "swatch": {
+   "bg": "#1f1f21",
+   "heading": "#b784a3",
+   "link": "#ffcf56",
+   "accent": "#b7afa8"
+  }
+ },
+ {
+  "id": "wolf-alabaster-dark",
+  "name": "Wolf Alabaster Dark",
+  "dark": true,
+  "swatch": {
+   "bg": "#0e1415",
+   "heading": "#71ade7",
+   "link": "#95cb82",
+   "accent": "#71ade7"
+  }
+ },
+ {
+  "id": "wolf-alabaster-dark-bg",
+  "name": "Wolf Alabaster Dark Bg",
+  "dark": true,
+  "swatch": {
+   "bg": "#0e1415",
+   "heading": "#cecece",
+   "link": "#cecece",
+   "accent": "#cecece"
+  }
+ },
+ {
+  "id": "wolf-alabaster-dark-mono",
+  "name": "Wolf Alabaster Dark Mono",
+  "dark": true,
+  "swatch": {
+   "bg": "#0e1415",
+   "heading": "#cecece",
+   "link": "#cecece",
+   "accent": "#cecece"
+  }
+ },
+ {
+  "id": "wolf-alabaster-light",
+  "name": "Wolf Alabaster Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#f7f7f7",
+   "heading": "#325cc0",
+   "link": "#448c27",
+   "accent": "#448c27"
+  }
+ },
+ {
+  "id": "wolf-alabaster-light-bg",
+  "name": "Wolf Alabaster Light Bg",
+  "dark": false,
+  "swatch": {
+   "bg": "#f7f7f7",
+   "heading": "#000000",
+   "link": "#000000",
+   "accent": "#000000"
+  }
+ },
+ {
+  "id": "wolf-alabaster-light-mono",
+  "name": "Wolf Alabaster Light Mono",
+  "dark": false,
+  "swatch": {
+   "bg": "#f7f7f7",
+   "heading": "#000000",
+   "link": "#000000",
+   "accent": "#000000"
+  }
+ },
+ {
+  "id": "yellowed",
+  "name": "Yellowed",
+  "dark": true,
+  "swatch": {
+   "bg": "#242424",
+   "heading": "#ffffff",
+   "link": "#ffffff",
+   "accent": "#378b1d"
+  }
+ },
+ {
+  "id": "yo",
+  "name": "Yo",
+  "dark": true,
+  "swatch": {
+   "bg": "#191919",
+   "heading": "#eeeeee",
+   "link": "#b4b4b4",
+   "accent": "#7b7b7b"
+  }
+ },
+ {
+  "id": "yo_berry",
+  "name": "Yo Berry",
+  "dark": true,
+  "swatch": {
+   "bg": "#1a191b",
+   "heading": "#eeeef0",
+   "link": "#b5b2bc",
+   "accent": "#7c7a85"
+  }
+ },
+ {
+  "id": "yo_light",
+  "name": "Yo Light",
+  "dark": false,
+  "swatch": {
+   "bg": "#f9f9f9",
+   "heading": "#202020",
+   "link": "#646464",
+   "accent": "#787878"
+  }
+ },
+ {
+  "id": "zed_onedark",
+  "name": "Zed Onedark",
+  "dark": true,
+  "swatch": {
+   "bg": "#282c33",
+   "heading": "#d07277",
+   "link": "#6eb4bf",
+   "accent": "#d07277"
+  }
+ },
+ {
+  "id": "zed_onelight",
+  "name": "Zed Onelight",
+  "dark": false,
+  "swatch": {
+   "bg": "#fafafa",
+   "heading": "#d3604f",
+   "link": "#3882b7",
+   "accent": "#55874a"
+  }
+ },
+ {
+  "id": "zenburn",
+  "name": "Zenburn",
+  "dark": true,
+  "swatch": {
+   "bg": "#3f3f3f",
+   "heading": "#dca3a3",
+   "link": "#efef8f",
+   "accent": "#8f8f8f"
+  }
+ }
+]

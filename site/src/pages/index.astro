@@ -1,16 +1,227 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const focus = [
+  {
+    k: "AI infrastructure",
+    d: "RAG pipelines, autonomous agents, agent sandboxing, and MCP tool integration wired into containerized job orchestration.",
+  },
+  {
+    k: "Platform & cloud",
+    d: "Greenfield Kubernetes / K3s buildouts, GitOps with Argo CD, and hybrid cloud + on-premise architecture on Hetzner and Proxmox.",
+  },
+  {
+    k: "Security & compliance",
+    d: "NIST 800-171 and CMMC 2.0 programs, cluster hardening, private PKI with step-ca, and Authentik SSO with enforced MFA.",
+  },
+];
+
+const elsewhere = [
+  { href: "/resume", label: "Résumé", note: "The full history" },
+  {
+    href: "https://github.com/MightBeAWolf",
+    label: "GitHub",
+    note: "Code and experiments",
+  },
+  {
+    href: "https://www.linkedin.com/in/thomas-wolf-207773227/",
+    label: "LinkedIn",
+    note: "Professional network",
+  },
+  {
+    href: "mailto:hire.me@wolfhouse.me",
+    label: "Email",
+    note: "hire.me@wolfhouse.me",
+  },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Salish Sea Wolf</title>
-	</head>
-	<body>
-		<h1>Hello World</h1>
-	</body>
-</html>
+<BaseLayout>
+  <section class="hero">
+    <div class="wrap hero__inner">
+      <p class="eyebrow">Salish Sea Wolf LLC</p>
+      <h1 class="hero__title">
+        I build <span class="hero__accent">high-availability</span> infrastructure
+        for AI and&nbsp;software systems.
+      </h1>
+      <p class="hero__lede">
+        I'm <strong>Thomas G. Wolf</strong> — a software and infrastructure
+        architect in the Greater Seattle Area with 10+ years standing up
+        AI platforms, Kubernetes clusters, and compliant on-premise environments
+        from the ground up.
+      </p>
+      <div class="hero__actions">
+        <a class="button button--primary" href="/resume">View résumé</a>
+        <a class="button" href="mailto:hire.me@wolfhouse.me">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="section__title">What I focus on</h2>
+      <ul class="cards">
+        {
+          focus.map((item) => (
+            <li class="card">
+              <h3 class="card__title">{item.k}</h3>
+              <p class="card__body">{item.d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="section__title">Elsewhere</h2>
+      <ul class="links">
+        {
+          elsewhere.map((link) => (
+            <li>
+              <a class="link-row" href={link.href}>
+                <span class="link-row__label">{link.label}</span>
+                <span class="link-row__note">{link.note}</span>
+                <span class="link-row__arrow" aria-hidden="true">
+                  &rarr;
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero__inner {
+    padding-block: clamp(3.5rem, 12vw, 7rem) clamp(2rem, 6vw, 3.5rem);
+    max-width: 46rem;
+  }
+
+  .hero__title {
+    font-size: clamp(2.1rem, 1.3rem + 3.6vw, 3.6rem);
+    margin: 0.6em 0 0.5em;
+  }
+
+  .hero__accent {
+    color: var(--accent);
+  }
+
+  .hero__lede {
+    font-size: clamp(1.05rem, 1rem + 0.4vw, 1.25rem);
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .hero__lede strong {
+    color: var(--text);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 2rem;
+  }
+
+  .section {
+    padding-block: clamp(2rem, 6vw, 3.5rem);
+  }
+
+  .section__title {
+    font-size: 1.05rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin: 0 0 1.5rem;
+  }
+
+  .cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    background: var(--bg-raised);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  .card__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+    color: var(--heading);
+  }
+
+  .card__body {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .link-row {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1rem 0.25rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .link-row:hover {
+    text-decoration: none;
+    padding-left: 0.75rem;
+  }
+
+  .link-row__label {
+    font-weight: 600;
+    min-width: 6rem;
+  }
+
+  .link-row:hover .link-row__label {
+    color: var(--heading);
+  }
+
+  .link-row__note {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    flex: 1;
+  }
+
+  .link-row__arrow {
+    color: var(--accent);
+    transition: transform 0.15s ease;
+  }
+
+  .link-row:hover .link-row__arrow {
+    transform: translateX(4px);
+  }
+
+  .link-row,
+  .link-row__label,
+  .link-row:hover {
+    transition: padding 0.15s ease, color 0.15s ease;
+  }
+</style>

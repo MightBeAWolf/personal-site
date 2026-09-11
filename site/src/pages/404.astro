@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Not found">
+  <section class="section">
+    <div class="wrap notfound">
+      <p class="eyebrow">404</p>
+      <h1>This trail doesn't go anywhere.</h1>
+      <p class="notfound__lede">
+        The page you were after has moved or never existed.
+      </p>
+      <a class="button button--primary" href="/">Back to home</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    padding-block: clamp(3rem, 12vw, 7rem);
+    max-width: 38rem;
+  }
+
+  .notfound h1 {
+    font-size: clamp(1.8rem, 1.3rem + 2.5vw, 2.75rem);
+    margin: 0.5em 0 0.4em;
+  }
+
+  .notfound__lede {
+    color: var(--text-muted);
+    margin: 0 0 2rem;
+  }
+</style>

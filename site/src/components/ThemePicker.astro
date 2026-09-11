@@ -1,0 +1,728 @@
+---
+import manifest from "../themes/helix-themes.json";
+import themesUrl from "../themes/helix-themes.json?url";
+
+const themes = manifest as { dark: boolean }[];
+const count = themes.length;
+const darkCount = themes.filter((t) => t.dark).length;
+---
+
+<div class="tp" data-theme-picker data-tp-src={themesUrl}>
+  <button
+    class="tp__trigger"
+    type="button"
+    aria-haspopup="listbox"
+    aria-controls="tp-list"
+    aria-expanded="false"
+    aria-label="Change theme"
+  >
+    <span class="tp__swatch" aria-hidden="true">
+      <i style="background:var(--bg)"></i>
+      <i style="background:var(--heading)"></i>
+      <i style="background:var(--link)"></i>
+      <i style="background:var(--accent)"></i>
+    </span>
+    <span class="tp__name" data-tp-name>Horizon Dark</span>
+    <svg class="tp__chevron" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+      <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </button>
+
+  <div class="tp__panel" data-tp-panel hidden>
+    <div class="tp__bar">
+      <input
+        type="search"
+        class="tp__search"
+        data-tp-search
+        role="combobox"
+        aria-controls="tp-list"
+        aria-expanded="false"
+        aria-autocomplete="list"
+        placeholder={`Search ${count} Helix themes…`}
+        aria-label="Filter themes"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <div class="tp__cycle" role="group" aria-label="Cycle themes">
+        <button type="button" data-tp-cycle="-1" aria-label="Previous theme" title="Previous (↑)">‹</button>
+        <button type="button" data-tp-cycle="random" aria-label="Random theme" title="Random">↺</button>
+        <button type="button" data-tp-cycle="1" aria-label="Next theme" title="Next (↓)">›</button>
+      </div>
+    </div>
+
+    <div class="tp__filters" role="group" aria-label="Filter by appearance">
+      <button type="button" class="is-on" data-tp-filter="all" aria-pressed="true">
+        All <span>{count}</span>
+      </button>
+      <button type="button" data-tp-filter="dark" aria-pressed="false">
+        Dark <span>{darkCount}</span>
+      </button>
+      <button type="button" data-tp-filter="light" aria-pressed="false">
+        Light <span>{count - darkCount}</span>
+      </button>
+    </div>
+
+    <p class="tp__status" data-tp-status aria-live="polite">{count} themes</p>
+
+    <ul class="tp__list" id="tp-list" data-tp-list role="listbox" aria-label="Themes"></ul>
+
+    <p class="tp__credit">
+      Palettes via <a
+        href="https://github.com/helix-editor/helix"
+        target="_blank"
+        rel="noopener">helix-editor/helix</a
+      >
+    </p>
+  </div>
+</div>
+
+{/*
+  Set the trigger label to match the already-applied theme before first paint,
+  so navigating between pages shows no flash. The full theme list (and exact
+  names) load lazily on first open; until then we use the name cached alongside
+  the theme id, falling back to a prettified id.
+*/}
+<script is:inline>
+  (function () {
+    var id = document.documentElement.getAttribute("data-theme");
+    if (!id) return;
+    var out = document.querySelector("[data-theme-picker] [data-tp-name]");
+    if (!out) return;
+    var cached;
+    try {
+      cached = localStorage.getItem("theme:name");
+    } catch (e) {
+      /* private mode */
+    }
+    out.textContent =
+      cached ||
+      id.replace(/[-_]+/g, " ").replace(/\b\w/g, function (c) {
+        return c.toUpperCase();
+      });
+  })();
+</script>
+
+<!--
+  is:global because the option rows are built in the client script with
+  document.createElement and so never receive Astro's `data-astro-cid-*`
+  scoping attribute - scoped selectors would miss them. Every rule below is
+  under the `.tp` / `.tp__` namespace this component owns.
+-->
+<style is:global>
+  .tp {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .tp__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55ch;
+    font: inherit;
+    font-size: 0.85rem;
+    line-height: 1;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+  }
+
+  .tp__trigger:hover,
+  .tp__trigger[aria-expanded="true"] {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  .tp__trigger[aria-busy="true"] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .tp__swatch {
+    display: inline-grid;
+    grid-auto-flow: column;
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgb(128 128 128 / 0.25);
+  }
+
+  .tp__swatch i {
+    width: 0.55rem;
+    height: 0.9rem;
+    display: block;
+  }
+
+  .tp__name {
+    max-width: 9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .tp__chevron {
+    flex: none;
+    opacity: 0.7;
+  }
+
+  /* panel ---------------------------------------------------------- */
+  .tp__panel {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    right: 0;
+    z-index: 50;
+    width: min(21rem, 88vw);
+    max-height: min(28rem, 70vh);
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  /* `display: flex` above outranks the UA `[hidden]` rule, so restore it. */
+  .tp__panel[hidden] {
+    display: none;
+  }
+
+  .tp__bar {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.7rem 0.7rem 0.5rem;
+  }
+
+  .tp__search {
+    flex: 1;
+    min-width: 0;
+    font: inherit;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.7rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .tp__search:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  .tp__cycle {
+    display: inline-flex;
+  }
+
+  .tp__cycle button {
+    width: 2rem;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .tp__cycle button:first-child {
+    border-radius: 8px 0 0 8px;
+  }
+
+  .tp__cycle button:last-child {
+    border-radius: 0 8px 8px 0;
+  }
+
+  .tp__cycle button + button {
+    border-left: 0;
+  }
+
+  .tp__cycle button:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  .tp__filters {
+    display: flex;
+    gap: 0.35rem;
+    padding: 0 0.7rem 0.55rem;
+  }
+
+  .tp__filters button {
+    flex: 1;
+    font: inherit;
+    font-size: 0.78rem;
+    padding: 0.3rem 0.4rem;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .tp__filters button span {
+    opacity: 0.6;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tp__filters button.is-on {
+    color: var(--bg);
+    background: var(--heading);
+    border-color: var(--heading);
+  }
+
+  .tp__filters button.is-on span {
+    opacity: 0.8;
+  }
+
+  .tp__status {
+    margin: 0;
+    padding: 0 0.85rem 0.4rem;
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tp__list {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0.25rem;
+    list-style: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .tp__credit {
+    flex: none;
+    margin: 0;
+    padding: 0.3rem 0.85rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.65rem;
+    line-height: 1;
+    color: var(--text-faint);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tp__credit a {
+    color: var(--text-muted);
+  }
+
+  .tp__credit a:hover {
+    color: var(--accent);
+  }
+
+  .tp__opt {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.55rem;
+    border-radius: 8px;
+    cursor: pointer;
+    scroll-margin: 0.5rem;
+  }
+
+  .tp__opt[hidden] {
+    display: none;
+  }
+
+  .tp__opt:hover,
+  .tp__opt.is-active {
+    background: var(--surface-selection);
+  }
+
+  .tp__opt[aria-selected="true"] {
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+
+  .tp__chip {
+    flex: none;
+    display: inline-flex;
+    width: 2.4rem;
+    height: 1.5rem;
+    border-radius: 5px;
+    background: var(--c-bg);
+    box-shadow: inset 0 0 0 1px rgb(128 128 128 / 0.3);
+    overflow: hidden;
+    padding: 0.22rem;
+    gap: 0.16rem;
+    align-items: flex-end;
+  }
+
+  .tp__chip i {
+    flex: 1;
+    border-radius: 1px;
+    height: 0.7rem;
+  }
+
+  .tp__chip-heading {
+    background: var(--c-heading);
+  }
+  .tp__chip-link {
+    background: var(--c-link);
+  }
+  .tp__chip-accent {
+    background: var(--c-accent);
+  }
+
+  .tp__opt-name {
+    flex: 1;
+    font-size: 0.88rem;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tp__opt-tag {
+    flex: none;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  .tp__empty {
+    padding: 1.25rem 0.85rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  @media (max-width: 34rem) {
+    .tp__name {
+      display: none;
+    }
+
+    .tp__panel {
+      position: fixed;
+      inset: auto 0 0 0;
+      width: 100%;
+      max-height: 78vh;
+      border-radius: 16px 16px 0 0;
+      border-bottom: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .tp__panel {
+      animation: tp-in 0.14s ease-out;
+    }
+    @keyframes tp-in {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+    }
+  }
+</style>
+
+<script>
+  const DEFAULT_THEME = "horizon-dark";
+
+  type El = HTMLElement;
+  type Entry = {
+    id: string;
+    name: string;
+    dark: boolean;
+    swatch: { bg: string; heading: string; link: string; accent: string };
+  };
+
+  const prettify = (id: string) =>
+    id.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+  function initPicker(root: El) {
+    const src = root.dataset.tpSrc!;
+    const trigger = root.querySelector<HTMLButtonElement>(".tp__trigger")!;
+    const panel = root.querySelector<El>("[data-tp-panel]")!;
+    const search = root.querySelector<HTMLInputElement>("[data-tp-search]")!;
+    const list = root.querySelector<El>("[data-tp-list]")!;
+    const status = root.querySelector<El>("[data-tp-status]")!;
+    const nameOut = root.querySelector<El>("[data-tp-name]")!;
+    const filterBtns = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("[data-tp-filter]"),
+    );
+
+    let mode: "all" | "dark" | "light" = "all";
+    let opts: El[] = [];
+    let byId = new Map<string, El>();
+    let visible: El[] = [];
+    let active = 0;
+    let loading: Promise<void> | null = null;
+    let opening = false;
+
+    const currentId = () =>
+      document.documentElement.getAttribute("data-theme") || DEFAULT_THEME;
+    const nameFor = (id: string) => byId.get(id)?.dataset.name || prettify(id);
+
+    function paintTrigger(id: string) {
+      // swatch <i>s follow live CSS vars; only the label needs scripting.
+      nameOut.textContent = nameFor(id);
+    }
+
+    function apply(id: string, persist = true) {
+      document.documentElement.setAttribute("data-theme", id);
+      if (persist) {
+        try {
+          localStorage.setItem("theme", id);
+          localStorage.setItem("theme:name", nameFor(id));
+        } catch {
+          /* private mode */
+        }
+      }
+      for (const el of opts) {
+        el.setAttribute("aria-selected", String(el.dataset.id === id));
+      }
+      paintTrigger(id);
+    }
+
+    function buildRows(entries: Entry[]) {
+      const frag = document.createDocumentFragment();
+      for (const t of entries) {
+        const li = document.createElement("li");
+        li.className = "tp__opt";
+        li.id = "tp-opt-" + t.id;
+        li.setAttribute("role", "option");
+        li.setAttribute("aria-selected", "false");
+        li.dataset.id = t.id;
+        li.dataset.name = t.name;
+        li.dataset.dark = String(t.dark);
+
+        const chip = document.createElement("span");
+        chip.className = "tp__chip";
+        chip.setAttribute("aria-hidden", "true");
+        chip.style.cssText =
+          `--c-bg:${t.swatch.bg};--c-heading:${t.swatch.heading};` +
+          `--c-link:${t.swatch.link};--c-accent:${t.swatch.accent}`;
+        chip.innerHTML =
+          '<i class="tp__chip-heading"></i>' +
+          '<i class="tp__chip-link"></i>' +
+          '<i class="tp__chip-accent"></i>';
+
+        const nm = document.createElement("span");
+        nm.className = "tp__opt-name";
+        nm.textContent = t.name;
+
+        const tag = document.createElement("span");
+        tag.className = "tp__opt-tag";
+        tag.textContent = t.dark ? "dark" : "light";
+
+        li.append(chip, nm, tag);
+        frag.append(li);
+      }
+      list.replaceChildren(frag);
+      opts = Array.from(list.querySelectorAll<El>(".tp__opt"));
+      byId = new Map(opts.map((el) => [el.dataset.id!, el]));
+      visible = opts.slice();
+    }
+
+    function load() {
+      if (!loading) {
+        loading = fetch(src)
+          .then((r) => {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.json();
+          })
+          .then((entries: Entry[]) => {
+            buildRows(entries);
+            apply(currentId(), false); // exact aria-selected + label now
+          })
+          .catch((err) => {
+            loading = null; // let a later open retry
+            status.textContent = "Couldn’t load themes.";
+            throw err;
+          });
+      }
+      return loading;
+    }
+
+    function setActive(i: number, scroll = true) {
+      if (!visible.length) return;
+      active = (i + visible.length) % visible.length;
+      for (const el of opts) el.classList.remove("is-active");
+      const el = visible[active];
+      el.classList.add("is-active");
+      search.setAttribute("aria-activedescendant", el.id);
+      if (scroll) el.scrollIntoView({ block: "nearest" });
+    }
+
+    function refilter() {
+      const q = search.value.trim().toLowerCase();
+      visible = opts.filter((el) => {
+        const okMode =
+          mode === "all" || (el.dataset.dark === "true") === (mode === "dark");
+        const okText =
+          !q ||
+          el.dataset.name!.toLowerCase().includes(q) ||
+          el.dataset.id!.includes(q);
+        el.hidden = !(okMode && okText);
+        return okMode && okText;
+      });
+      status.textContent =
+        visible.length === opts.length
+          ? `${opts.length} themes`
+          : `${visible.length} of ${opts.length}`;
+      let empty = list.querySelector<El>(".tp__empty");
+      if (!visible.length && !empty) {
+        empty = document.createElement("li");
+        empty.className = "tp__empty";
+        empty.textContent = "No themes match.";
+        list.append(empty);
+      } else if (visible.length && empty) {
+        empty.remove();
+      }
+      const cur = visible.findIndex((el) => el.dataset.id === currentId());
+      setActive(cur >= 0 ? cur : 0, false);
+    }
+
+    function step(delta: number) {
+      if (!visible.length) return;
+      setActive(active + delta);
+      apply(visible[active].dataset.id!);
+    }
+
+    // --- auto-dismiss once the mouse has been away for 5s -----------
+    let idleTimer = 0;
+    const cancelDismiss = () => {
+      clearTimeout(idleTimer);
+      idleTimer = 0;
+    };
+    const scheduleDismiss = () => {
+      cancelDismiss();
+      idleTimer = window.setTimeout(() => {
+        if (!panel.hidden && !root.matches(":hover")) close();
+      }, 5000);
+    };
+    const onPointerEnter = (e: PointerEvent) => {
+      if (e.pointerType !== "touch") cancelDismiss();
+    };
+    const onPointerLeave = (e: PointerEvent) => {
+      if (e.pointerType !== "touch") scheduleDismiss();
+    };
+    const onFocusOut = (e: FocusEvent) => {
+      if (!root.contains(e.relatedTarget as Node)) scheduleDismiss();
+    };
+
+    function open() {
+      if (!panel.hidden) return;
+      panel.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      search.setAttribute("aria-expanded", "true");
+      refilter();
+      const cur = visible.findIndex((el) => el.dataset.id === currentId());
+      if (cur >= 0) setActive(cur);
+      search.focus();
+      document.addEventListener("pointerdown", onOutside, true);
+      document.addEventListener("keydown", onKey, true);
+      root.addEventListener("pointerenter", onPointerEnter);
+      root.addEventListener("pointerleave", onPointerLeave);
+      root.addEventListener("focusin", cancelDismiss);
+      root.addEventListener("focusout", onFocusOut);
+    }
+
+    function close() {
+      if (panel.hidden) return;
+      panel.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      search.setAttribute("aria-expanded", "false");
+      search.removeAttribute("aria-activedescendant");
+      cancelDismiss();
+      document.removeEventListener("pointerdown", onOutside, true);
+      document.removeEventListener("keydown", onKey, true);
+      root.removeEventListener("pointerenter", onPointerEnter);
+      root.removeEventListener("pointerleave", onPointerLeave);
+      root.removeEventListener("focusin", cancelDismiss);
+      root.removeEventListener("focusout", onFocusOut);
+      // don't yank focus if the user has already clicked away from the widget
+      if (root.contains(document.activeElement)) trigger.focus();
+    }
+
+    function onOutside(e: PointerEvent) {
+      if (!root.contains(e.target as Node)) close();
+    }
+
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        step(1);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        step(-1);
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (visible.length) {
+          apply(visible[active].dataset.id!);
+          close();
+        }
+      }
+    }
+
+    function toggle() {
+      if (!panel.hidden) {
+        close();
+        return;
+      }
+      if (opening) return;
+      opening = true;
+      trigger.setAttribute("aria-busy", "true");
+      load()
+        .then(open)
+        .catch(() => {})
+        .finally(() => {
+          opening = false;
+          trigger.removeAttribute("aria-busy");
+        });
+    }
+
+    trigger.addEventListener("click", toggle);
+    search.addEventListener("input", refilter);
+
+    list.addEventListener("click", (e) => {
+      const opt = (e.target as El).closest<El>(".tp__opt");
+      if (!opt) return;
+      const idx = visible.indexOf(opt);
+      if (idx >= 0) setActive(idx, false);
+      apply(opt.dataset.id!);
+      // stay open so the next theme is one click away; keep focus in the widget
+      search.focus();
+    });
+
+    root.querySelectorAll<HTMLButtonElement>("[data-tp-cycle]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const v = b.dataset.tpCycle!;
+        if (v === "random") {
+          if (visible.length) {
+            setActive(Math.floor(Math.random() * visible.length));
+            apply(visible[active].dataset.id!);
+          }
+        } else {
+          step(Number(v));
+        }
+        search.focus();
+      }),
+    );
+
+    filterBtns.forEach((b) =>
+      b.addEventListener("click", () => {
+        mode = b.dataset.tpFilter as typeof mode;
+        for (const x of filterBtns) {
+          const on = x === b;
+          x.classList.toggle("is-on", on);
+          x.setAttribute("aria-pressed", String(on));
+        }
+        refilter();
+      }),
+    );
+  }
+
+  document
+    .querySelectorAll<HTMLElement>("[data-theme-picker]")
+    .forEach((el) => initPicker(el));
+</script>
