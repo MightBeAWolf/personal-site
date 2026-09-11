@@ -1,0 +1,482 @@
+---
+interface Props {
+  terms: { id: string; title: string }[];
+}
+const { terms } = Astro.props;
+---
+
+{/*
+  Single instance per page. Popup cards themselves are created and destroyed
+  at runtime (document.createElement), not server-rendered, because several
+  can be open at once - a nesting chain, not a single reusable panel like
+  ThemePicker's dropdown. This root only needs to sit somewhere that isn't a
+  descendant of anything with filter/backdrop-filter/transform/will-change/
+  contain (see Header.astro's ::before fix) - it must not end up under
+  .site-header, or fixed-position cards will trap against that ancestor
+  instead of the viewport, exactly like the earlier mobile theme-picker bug.
+*/}
+<div
+  id="glossary-popup-root"
+  data-glossary-terms={JSON.stringify(terms)}
+  aria-live="polite"
+></div>
+
+<style is:global>
+  /*
+   * is:global because every card is built with document.createElement, so
+   * scoped `data-astro-cid-*` selectors would never match them - the same
+   * reason ThemePicker.astro's stylesheet is global.
+   */
+  .glossary-popup {
+    position: fixed;
+    z-index: 60;
+    width: max-content;
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    background: var(--bg-raised);
+    box-shadow: var(--shadow);
+    padding: 0.85rem 1rem 1.1rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    /*
+     * Also fixes a horizontal scrollbar: setting overflow-y to anything but
+     * `visible` forces the browser to treat overflow-x as `auto` too (you
+     * can't scroll one axis while the other stays truly visible), so any
+     * stray horizontal overflow was showing a scrollbar even though nothing
+     * actually needed to scroll sideways. The JS below overrides overflow-y
+     * to `auto` per-popup once content size is known; overflow-x stays
+     * hidden here.
+     */
+    overflow: hidden;
+  }
+
+  .glossary-popup__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .glossary-popup__head strong {
+    color: var(--heading);
+    font-size: 0.95rem;
+  }
+
+  .glossary-popup__open {
+    flex: none;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .glossary-popup__open:hover {
+    color: var(--accent);
+  }
+
+  /*
+   * The progress bar overlays the (already-visible) content for a fixed beat
+   * after opening - while it's filling, leaving the trigger closes the popup
+   * outright. Once it's gone, the trigger and the popup (and anything nested
+   * inside it) act as one continuous hover region.
+   *
+   * `pointer-events: none` matters beyond just "it's decorative": arm()
+   * removes this element outright, and a removed element that *could* have
+   * captured the pointer leaves a stale hit-test result until the next real
+   * mouse move - which then fires a pointerout nobody expected, closing the
+   * popup the instant the cursor so much as twitches after arming. Making it
+   * inert up front means the card is always what's actually under the
+   * cursor, both before and after removal.
+   */
+  .glossary-popup__progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--border);
+    pointer-events: none;
+  }
+
+  .glossary-popup__progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    animation-name: glossary-charge;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes glossary-charge {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  .glossary-popup__error {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .glossary-popup__body {
+    font-size: 0.88rem;
+  }
+
+  .glossary-popup__body :where(h1, h2, h3) {
+    font-size: 0.92rem;
+  }
+</style>
+
+<script>
+  import {
+    computePosition,
+    autoUpdate,
+    flip,
+    shift,
+    offset,
+    size,
+  } from "@floating-ui/dom";
+
+  const GRACE_MS = 150;
+  const CHARGE_MS = 550;
+  const MAX_WIDTH = 380;
+
+  interface Level {
+    trigger: HTMLElement;
+    card: HTMLElement;
+    slug: string;
+    parent: Level | null;
+    children: Set<Level>;
+    closeTimer: number;
+    chargeTimer: number;
+    /**
+     * false for CHARGE_MS after opening: content is already visible, but
+     * leaving the trigger closes the popup immediately - the user has to
+     * keep hovering the word for the popup to "commit". Once true, the
+     * usual grace-period bridging kicks in and the mouse can move from the
+     * trigger into the popup (and any nested popup it opens) freely.
+     */
+    armed: boolean;
+    stopAutoUpdate: () => void;
+  }
+
+  const root = document.getElementById("glossary-popup-root");
+  if (root) {
+    const titleById = new Map<string, string>(
+      (JSON.parse(root.dataset.glossaryTerms || "[]") as { id: string; title: string }[]).map(
+        (t) => [t.id, t.title],
+      ),
+    );
+
+    const triggerLevels = new Map<HTMLElement, Level>();
+    const cardLevels = new Map<HTMLElement, Level>();
+    const fragmentCache = new Map<string, string>();
+    const pendingFetches = new Map<string, Promise<string>>();
+
+    function ancestorChainHasSlug(level: Level | null, slug: string): boolean {
+      for (let l = level; l; l = l.parent) if (l.slug === slug) return true;
+      return false;
+    }
+
+    function parentLevelFor(trigger: HTMLElement): Level | null {
+      const card = trigger.closest<HTMLElement>(".glossary-popup");
+      return card ? cardLevels.get(card) ?? null : null;
+    }
+
+    async function fetchFragment(slug: string): Promise<string> {
+      const res = await fetch(`/glossary/${slug}/`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const doc = new DOMParser().parseFromString(await res.text(), "text/html");
+      const el = doc.getElementById("glossary-content");
+      if (!el) throw new Error("missing #glossary-content");
+      return el.innerHTML;
+    }
+
+    function progressBar() {
+      return `<div class="glossary-popup__progress" aria-hidden="true">
+        <div class="glossary-popup__progress-fill" style="animation-duration:${CHARGE_MS}ms"></div>
+      </div>`;
+    }
+
+    // Content and the progress bar render together from the start - the bar
+    // is a timing gate on *interactivity*, not a stand-in for content that
+    // hasn't arrived yet.
+    function renderShell(card: HTMLElement, slug: string) {
+      const title = titleById.get(slug) ?? slug;
+      card.innerHTML =
+        `<div class="glossary-popup__head"><strong>${title}</strong>` +
+        `<a class="glossary-popup__open" href="/glossary/${slug}/" target="_blank" rel="noopener">Open full page &nearr;</a></div>` +
+        `<div class="glossary-popup__body glossary-body"></div>` +
+        progressBar();
+    }
+
+    function renderContent(card: HTMLElement, html: string) {
+      const body = card.querySelector<HTMLElement>(".glossary-popup__body");
+      if (body) body.innerHTML = html;
+    }
+
+    function renderError(card: HTMLElement) {
+      const body = card.querySelector<HTMLElement>(".glossary-popup__body");
+      if (body) body.innerHTML = `<p class="glossary-popup__error">Couldn't load this.</p>`;
+    }
+
+    async function loadInto(level: Level) {
+      const { slug, card } = level;
+      const cached = fragmentCache.get(slug);
+      if (cached !== undefined) {
+        renderContent(card, cached);
+        return;
+      }
+      const fetchPromise = pendingFetches.get(slug) ?? fetchFragment(slug);
+      pendingFetches.set(slug, fetchPromise);
+      try {
+        const html = await fetchPromise;
+        fragmentCache.set(slug, html);
+        if (!triggerLevels.has(level.trigger)) return; // closed while loading
+        renderContent(card, html);
+      } catch {
+        if (triggerLevels.has(level.trigger)) renderError(card);
+      } finally {
+        pendingFetches.delete(slug);
+      }
+    }
+
+    function position(level: Level) {
+      // `boundary: document.body` matters specifically for nested popups: a
+      // nested trigger lives inside its parent's `.glossary-popup`, which is
+      // `overflow: hidden` (needed to clip the progress bar and keep the
+      // horizontal-overflow fix from earlier). flip/shift/size default to
+      // `boundary: 'clippingAncestors'`, which walks up from the *reference*
+      // element collecting overflow-hidden ancestors - so without this
+      // override, a nested popup's available space gets computed against its
+      // parent card's small box instead of the viewport, even though
+      // `strategy: "fixed"` positions the floating element itself correctly.
+      // The result was a nested popup collapsed to a near-zero-size box:
+      // still "visible" enough to pass a loose assertion, but nothing real
+      // to click or hover.
+      const boundary = document.body;
+      computePosition(level.trigger, level.card, {
+        strategy: "fixed",
+        placement: "bottom-start",
+        middleware: [
+          offset(8),
+          flip({ boundary }),
+          shift({ padding: 8, boundary }),
+          size({
+            padding: 8,
+            boundary,
+            apply({ availableWidth, availableHeight, elements }) {
+              Object.assign(elements.floating.style, {
+                maxWidth: `${Math.min(availableWidth, MAX_WIDTH)}px`,
+                maxHeight: `${availableHeight}px`,
+                overflowY: "auto",
+              });
+            },
+          }),
+        ],
+      }).then(({ x, y }) => {
+        Object.assign(level.card.style, { left: `${x}px`, top: `${y}px` });
+      });
+    }
+
+    function open(trigger: HTMLElement): Level | undefined {
+      const existing = triggerLevels.get(trigger);
+      if (existing) {
+        cancelClose(existing);
+        return existing;
+      }
+
+      const slug = trigger.dataset.glossaryTerm;
+      if (!slug || !root) return;
+
+      const parent = parentLevelFor(trigger);
+      if (ancestorChainHasSlug(parent, slug)) return; // cycle guard
+
+      const card = document.createElement("div");
+      card.className = "glossary-popup";
+      card.setAttribute("role", "group");
+      card.setAttribute("aria-label", titleById.get(slug) ?? slug);
+      card.tabIndex = -1;
+      root.appendChild(card);
+
+      const level: Level = {
+        trigger,
+        card,
+        slug,
+        parent,
+        children: new Set(),
+        closeTimer: 0,
+        chargeTimer: 0,
+        armed: false,
+        stopAutoUpdate: () => {},
+      };
+      parent?.children.add(level);
+      triggerLevels.set(trigger, level);
+      cardLevels.set(card, level);
+      trigger.setAttribute("aria-expanded", "true");
+
+      renderShell(card, slug);
+      position(level);
+      level.stopAutoUpdate = autoUpdate(trigger, card, () => position(level));
+      loadInto(level);
+      level.chargeTimer = window.setTimeout(() => arm(level), CHARGE_MS);
+
+      return level;
+    }
+
+    function arm(level: Level) {
+      level.armed = true;
+      level.card.querySelector(".glossary-popup__progress")?.remove();
+    }
+
+    // A nested trigger lives inside its parent popup's card, so landing on
+    // it (via hover or focus) is *also* re-entering that card - cancel the
+    // parent's pending close too (cancelClose already walks further
+    // ancestors on its own). Without this, moving straight from a trigger
+    // onto a nested trigger inside an armed parent left that parent's
+    // grace-period close running unopposed: it always fired before the
+    // nested popup finished arming, and closed both when it did.
+    function openAndBridgeParent(trigger: HTMLElement) {
+      open(trigger);
+      const enclosing = parentLevelFor(trigger);
+      if (enclosing) cancelClose(enclosing);
+    }
+
+    function close(level: Level) {
+      for (const child of [...level.children]) close(child);
+      level.parent?.children.delete(level);
+      clearTimeout(level.chargeTimer);
+      clearTimeout(level.closeTimer);
+      level.stopAutoUpdate();
+      level.card.remove();
+      level.trigger.removeAttribute("aria-expanded");
+      triggerLevels.delete(level.trigger);
+      cardLevels.delete(level.card);
+    }
+
+    function cancelClose(level: Level) {
+      // Walk the *logical* parent chain, not just this one level. A nested
+      // popup's card is a DOM sibling of its parent's card (both live flat
+      // under #glossary-popup-root), not a descendant of it - so entering a
+      // nested card genuinely leaves the parent card's DOM boundary too, and
+      // the parent's own pending close needs cancelling right along with
+      // this level's, or it fires on schedule and takes this level down
+      // with it via close()'s recursive child-closing.
+      for (let l: Level | null = level; l; l = l.parent) {
+        clearTimeout(l.closeTimer);
+      }
+    }
+
+    function scheduleClose(level: Level) {
+      if (!level.armed) {
+        // Still charging: leaving the trigger (or the card, though that
+        // shouldn't normally happen pre-arm) closes right away, synchronously
+        // - no grace window to race against a stray pointerover elsewhere.
+        close(level);
+        return;
+      }
+      cancelClose(level);
+      level.closeTimer = window.setTimeout(() => close(level), GRACE_MS);
+    }
+
+    function scheduleCloseChain(level: Level) {
+      // Mirrors cancelClose's ancestor-walk on the way out: pointerout only
+      // ever fires once per transition, targeted at the single deepest
+      // element the pointer left (it bubbles rather than re-firing per
+      // ancestor) - so leaving a nested trigger/card never, by itself,
+      // tells an *enclosing* popup anything happened. Schedule every
+      // ancestor's close unconditionally here; if the pointer actually
+      // landed somewhere else in the same chain, the pointerover/focusin
+      // handlers' own ancestor-walking cancelClose() undoes exactly the
+      // ones that turned out to be wrong.
+      for (let l: Level | null = level; l; l = l.parent) {
+        scheduleClose(l);
+      }
+    }
+
+    function levelFromEvent(e: Event): { level: Level; el: HTMLElement } | null {
+      const target = e.target as HTMLElement;
+      const trigger = target.closest<HTMLElement>(".glossary-term");
+      if (trigger) {
+        const level = triggerLevels.get(trigger);
+        if (level) return { level, el: trigger };
+        return null;
+      }
+      const card = target.closest<HTMLElement>(".glossary-popup");
+      if (card) {
+        const level = cardLevels.get(card);
+        if (level) return { level, el: card };
+      }
+      return null;
+    }
+
+    // pointerenter/leave don't bubble, so delegation for dynamically-injected
+    // triggers (nested terms inside fetched popup content) needs the
+    // bubbling pointerover/pointerout pair, filtered by relatedTarget to
+    // emulate enter/leave semantics.
+    document.addEventListener("pointerover", (e) => {
+      const pe = e as PointerEvent;
+      if (pe.pointerType === "touch") return;
+      const target = pe.target as HTMLElement;
+      const trigger = target.closest<HTMLElement>(".glossary-term");
+      if (trigger) {
+        if (!trigger.contains(pe.relatedTarget as Node)) openAndBridgeParent(trigger);
+        return;
+      }
+      // Re-entering an already-open card (once armed) cancels its pending
+      // close - this was missing before, which meant the grace timer fired
+      // regardless of the pointer actually landing back inside the popup.
+      const card = target.closest<HTMLElement>(".glossary-popup");
+      if (card) {
+        const level = cardLevels.get(card);
+        if (level && !card.contains(pe.relatedTarget as Node)) cancelClose(level);
+      }
+    });
+
+    document.addEventListener("pointerout", (e) => {
+      const pe = e as PointerEvent;
+      if (pe.pointerType === "touch") return;
+      const hit = levelFromEvent(pe);
+      if (hit && !hit.el.contains(pe.relatedTarget as Node)) scheduleCloseChain(hit.level);
+    });
+
+    document.addEventListener("focusin", (e) => {
+      const target = e.target as HTMLElement;
+      const trigger = target.closest<HTMLElement>(".glossary-term");
+      if (trigger) {
+        openAndBridgeParent(trigger);
+        return;
+      }
+      const card = target.closest<HTMLElement>(".glossary-popup");
+      if (card) {
+        const level = cardLevels.get(card);
+        if (level) cancelClose(level);
+      }
+    });
+
+    document.addEventListener("focusout", (e) => {
+      const fe = e as FocusEvent;
+      const hit = levelFromEvent(fe);
+      if (hit && !hit.el.contains(fe.relatedTarget as Node)) scheduleCloseChain(hit.level);
+    });
+
+    // Touch: tap a term to open it; tap anywhere outside every open
+    // trigger/card closes everything. Not the primary design target.
+    document.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      const trigger = target.closest<HTMLElement>(".glossary-term");
+      if (trigger) {
+        if (!triggerLevels.has(trigger)) open(trigger);
+        return;
+      }
+      if (!target.closest(".glossary-popup")) {
+        for (const level of [...triggerLevels.values()]) {
+          if (!level.parent) close(level);
+        }
+      }
+    });
+  }
+</script>

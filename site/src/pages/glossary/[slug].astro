@@ -1,0 +1,103 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import GlossaryPopup from "../../components/GlossaryPopup.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("glossary");
+  // Threaded into every generated page's props below, rather than each page
+  // re-fetching the collection itself.
+  const terms = entries.map((e) => ({ id: e.id, title: e.data.title }));
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry, terms },
+  }));
+}
+
+const { entry, terms } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.summary}>
+  <article class="page">
+    <header class="page-head">
+      <div class="wrap col page-head__inner">
+        <a class="page-back" href="/tech-stack">&larr; Tech Stack</a>
+        <h1>{entry.data.title}</h1>
+        <p class="lede">{entry.data.summary}</p>
+        {
+          entry.data.link && (
+            <a class="official-link" href={entry.data.link} target="_blank" rel="noopener">
+              Official site &nearr;
+            </a>
+          )
+        }
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="wrap col">
+        {/*
+          `#glossary-content` is a stable contract with GlossaryPopup.astro:
+          it fetches this same page and extracts exactly this element's
+          innerHTML to show in the popup. `.glossary-body` is the shared,
+          genuinely-global styling hook (see site/src/styles/global.css) -
+          it has to work whichever page the markup ends up rendered into.
+        */}
+        <div id="glossary-content" class="glossary-body">
+          <Content />
+        </div>
+      </div>
+    </section>
+
+    <GlossaryPopup terms={terms} />
+  </article>
+</BaseLayout>
+
+<style>
+  /*
+   * Shared width constraint for both the header and the content wrap below,
+   * so the two columns share one left edge instead of each centering .wrap
+   * independently at a different max-width (the header used to override it
+   * alone, leaving the body at .wrap's global 72rem and visibly outdented).
+   */
+  .col {
+    max-width: 42rem;
+  }
+
+  .page-head__inner {
+    padding-block: clamp(2rem, 6vw, 4rem) 0;
+  }
+
+  .page-back {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .page-back:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 1.4rem + 1.6vw, 2.4rem);
+    margin: 0.6em 0 0.3em;
+  }
+
+  .lede {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    margin: 0 0 0.75rem;
+    max-width: 55ch;
+  }
+
+  .official-link {
+    display: inline-block;
+    font-size: 0.9rem;
+  }
+
+  .section {
+    padding-block: clamp(1rem, 4vw, 2rem) clamp(2.5rem, 6vw, 4rem);
+  }
+</style>

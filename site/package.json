@@ -13,7 +13,8 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "astro": "^7.3.2"
+    "astro": "^7.3.2",
+    "@floating-ui/dom": "1.8.0"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
