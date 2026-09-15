@@ -1,0 +1,77 @@
+name: Publish
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Not mise-managed (see mise.toml [tools]) - assumed pre-installed on
+      # the maintainer's own machine, so the runner needs it explicitly.
+      - name: Install Podman
+        run: sudo apt-get update && sudo apt-get install -y podman
+
+      - name: Install mise + declared tools
+        uses: jdx/mise-action@v2
+        with:
+          install: true
+          cache: true
+
+      # Builds the site and runs the full Playwright suite - the gate
+      # everything below is conditioned on passing.
+      - name: Run e2e test suite
+        run: mise run test:e2e
+
+      # GHCR requires a lowercase repo path; github.repository preserves the
+      # original owner/repo casing. IMAGE_NAME comes from mise.toml's own
+      # env (derived from the checkout dir's basename, not a fixed string),
+      # so it's read back via `mise env` rather than assumed.
+      - name: Compute image tags
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        id: tags
+        run: |
+          eval "$(mise env)"
+          repo="ghcr.io/${GITHUB_REPOSITORY,,}"
+          echo "local=localhost/${IMAGE_NAME}:production" >> "$GITHUB_OUTPUT"
+          echo "latest=$repo:latest" >> "$GITHUB_OUTPUT"
+          echo "sha=$repo:${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Build production image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: MODE=production mise run build
+
+      # podman:build's own extra-tags arg prepends ${IMAGE_NAME}: to
+      # whatever's passed (it's meant for bare suffixes like "v1.2.3"), so a
+      # fully-qualified GHCR reference can't go through it directly - tag
+      # the already-built local image instead.
+      - name: Tag image for GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          podman tag "${{ steps.tags.outputs.local }}" "${{ steps.tags.outputs.latest }}"
+          podman tag "${{ steps.tags.outputs.local }}" "${{ steps.tags.outputs.sha }}"
+
+      - name: Log in to GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Push image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          podman push "${{ steps.tags.outputs.latest }}"
+          podman push "${{ steps.tags.outputs.sha }}"
