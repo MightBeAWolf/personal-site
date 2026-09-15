@@ -29,9 +29,14 @@ test.describe("Tools / Workflows sub-articles", () => {
     // Editor has two sub-articles (In Terminal, VS Code) sharing one
     // per-item accordion name, so they're mutually exclusive with each
     // other but independent of any other item's own articles.
+    //
+    // Filtered by the <summary>'s own text, not the whole <details> - once
+    // "In Terminal" is open its body text is in the DOM too, and it happens
+    // to mention "VS Code" in passing, so filtering on the whole subtree's
+    // text would match both articles once "In Terminal" is expanded.
     const articles = page.locator("details.accordion-item[name='tools-editor-accordion']");
-    const inTerminal = articles.filter({ hasText: "In Terminal" });
-    const vsCode = articles.filter({ hasText: "VS Code" });
+    const inTerminal = articles.filter({ has: page.locator("summary", { hasText: "In Terminal" }) });
+    const vsCode = articles.filter({ has: page.locator("summary", { hasText: "VS Code" }) });
 
     await inTerminal.locator("summary").click();
     await expect(inTerminal).toHaveAttribute("open", "");
@@ -44,7 +49,7 @@ test.describe("Tools / Workflows sub-articles", () => {
   test("an item with no sub-articles yet shows no expand affordance at all", async ({
     page,
   }) => {
-    const row = page.locator(".tri-item", { hasText: "Shell & OS" });
+    const row = page.locator(".tri-item", { hasText: "Secrets" });
     const slot = row.locator("xpath=following-sibling::div[1]");
     await expect(slot).toHaveClass(/tri-slot-empty/);
     await expect(slot.locator("details")).toHaveCount(0);
