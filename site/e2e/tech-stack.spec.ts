@@ -8,12 +8,12 @@ test("renders the expected sections", async ({ page }) => {
   }
 });
 
-test.describe("Tools / Workflows accordion", () => {
+test.describe("Tools / Workflows sub-articles", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/tech-stack");
   });
 
-  test("a row's detail is collapsed until its summary is clicked", async ({ page }) => {
+  test("an article is collapsed until its summary is clicked", async ({ page }) => {
     const row = page.locator("details.accordion-item").first();
     await expect(row).not.toHaveAttribute("open", "");
     await expect(row.locator(".accordion-body")).toBeHidden();
@@ -23,19 +23,31 @@ test.describe("Tools / Workflows accordion", () => {
     await expect(row.locator(".accordion-body")).toBeVisible();
   });
 
-  test("opening a row collapses a previously open row in the same section", async ({
+  test("opening one article under an item collapses another under the same item", async ({
     page,
   }) => {
-    const rows = page.locator("details.accordion-item[name='tools-accordion']");
-    const first = rows.nth(0);
-    const second = rows.nth(1);
+    // Editor has two sub-articles (In Terminal, VS Code) sharing one
+    // per-item accordion name, so they're mutually exclusive with each
+    // other but independent of any other item's own articles.
+    const articles = page.locator("details.accordion-item[name='tools-editor-accordion']");
+    const inTerminal = articles.filter({ hasText: "In Terminal" });
+    const vsCode = articles.filter({ hasText: "VS Code" });
 
-    await first.locator("summary").click();
-    await expect(first).toHaveAttribute("open", "");
+    await inTerminal.locator("summary").click();
+    await expect(inTerminal).toHaveAttribute("open", "");
 
-    await second.locator("summary").click();
-    await expect(second).toHaveAttribute("open", "");
-    await expect(first).not.toHaveAttribute("open", "");
+    await vsCode.locator("summary").click();
+    await expect(vsCode).toHaveAttribute("open", "");
+    await expect(inTerminal).not.toHaveAttribute("open", "");
+  });
+
+  test("an item with no sub-articles yet shows no expand affordance at all", async ({
+    page,
+  }) => {
+    const row = page.locator(".tri-item", { hasText: "Shell & OS" });
+    const slot = row.locator("xpath=following-sibling::div[1]");
+    await expect(slot).toHaveClass(/tri-slot-empty/);
+    await expect(slot.locator("details")).toHaveCount(0);
   });
 });
 
@@ -58,7 +70,7 @@ test.describe("Tech stack tree", () => {
     const leaf = group.locator("details.accordion-item--leaf", { hasText: "Ansible" }).first();
     await leaf.locator("summary").click();
 
-    const body = leaf.locator(".accordion-body");
+    const body = leaf.locator(".accordion-body").first();
     await expect(body).toBeVisible();
     expect((await body.innerText()).length).toBeGreaterThan(10);
     await expect(body.getByRole("link", { name: /open full page/i })).toHaveAttribute(
@@ -67,7 +79,7 @@ test.describe("Tech stack tree", () => {
     );
   });
 
-  test("a leaf without a glossary page renders as plain text, not an expandable row", async ({
+  test("a leaf without a glossary page or articles renders as plain text, not an expandable row", async ({
     page,
   }) => {
     const category = page.locator(".tri-item", { hasText: "Automation & IaC" });
@@ -81,5 +93,34 @@ test.describe("Tech stack tree", () => {
     const plainLeaf = group.locator(".stack-leaf-plain", { hasText: "Packer" });
     await expect(plainLeaf).toBeVisible();
     expect(await plainLeaf.evaluate((el) => el.tagName)).toBe("DIV");
+  });
+
+  test("a leaf's own sub-article nests inside its glossary summary", async ({ page }) => {
+    const category = page.locator(".tri-item", { hasText: "Cloud & platform" });
+    const detail = category.locator("xpath=following-sibling::div[1]");
+
+    const group = detail.locator("details.accordion-item--group", {
+      hasText: "Kubernetes ecosystem",
+    });
+    await group.locator("summary").first().click();
+
+    const leaf = group.locator("details.accordion-item--leaf", { hasText: "Podman" }).first();
+    await leaf.locator("summary").first().click();
+
+    // the glossary blurb is still there...
+    await expect(leaf.getByRole("link", { name: /open full page/i })).toHaveAttribute(
+      "href",
+      "/glossary/podman/",
+    );
+
+    // ...alongside the leaf's own nested article, independently collapsed
+    const article = leaf.locator("details.accordion-item--article", {
+      hasText: "Podman over Docker",
+    });
+    await expect(article).toBeVisible();
+    await expect(article.locator(".accordion-body")).toBeHidden();
+
+    await article.locator("summary").click();
+    await expect(article.locator(".accordion-body")).toBeVisible();
   });
 });

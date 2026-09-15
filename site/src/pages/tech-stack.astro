@@ -4,6 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import GlossaryPopup from "../components/GlossaryPopup.astro";
 import { linkGlossaryTerms } from "../lib/glossary-link";
 import { stackCategories } from "../data/tech-stack";
+import { tools as toolItems, workflows as workflowItems } from "../data/practices";
 
 const updated = "September 2026";
 
@@ -22,16 +23,64 @@ const slugify = (s: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 
-const practiceEntries = await getCollection("practices");
-const practices = await Promise.all(
-  practiceEntries.map(async (e) => ({ ...e, rendered: await render(e) })),
+// Narrative sub-articles for column 3 - matched to their parent item/leaf
+// by path (see content.config.ts and src/content/articles/), not by any
+// frontmatter field, so renaming an item never leaves a stale reference
+// behind - only its folder name would need to move.
+const articleEntries = await getCollection("articles");
+const articles = await Promise.all(
+  articleEntries.map(async (e) => ({ ...e, rendered: await render(e) })),
 );
-const bySection = (section: "tools" | "workflows") =>
-  practices
-    .filter((p) => p.data.section === section)
-    .sort((a, b) => a.data.order - b.data.order);
-const tools = bySection("tools");
-const workflows = bySection("workflows");
+const articlesUnder = (prefix: string) =>
+  articles
+    .filter((a) => a.id.startsWith(`${prefix}/`))
+    .sort((a, b) => {
+      const orderA = a.data.order ?? Number.POSITIVE_INFINITY;
+      const orderB = b.data.order ?? Number.POSITIVE_INFINITY;
+      return orderA !== orderB
+        ? orderA - orderB
+        : a.data.title.localeCompare(b.data.title);
+    });
+
+// A tool/workflow article can have its own family of glossary entries
+// nested one tier deeper as sub-accordions - e.g. "Mise Cookbook" (the
+// article) plus site/src/content/glossary/mise-cookbook-python.md (a
+// sub-accordion within it). Matched by id prefix (slugify(article title)
+// + "-"), the same "add a file, nothing else needs to change" convention
+// used everywhere else on this page - a `mise-cookbook-node.md` dropped in
+// later needs no wiring here.
+const cookbookLabel = (id: string, prefix: string) =>
+  id
+    .slice(prefix.length)
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+
+const withCookbooks = async (article: (typeof articles)[number]) => {
+  const prefix = `${slugify(article.data.title)}-`;
+  const entries = glossaryEntries.filter((e) => e.id.startsWith(prefix));
+  const cookbooks = await Promise.all(
+    entries.map(async (entry) => ({
+      label: cookbookLabel(entry.id, prefix),
+      entry,
+      rendered: await render(entry),
+    })),
+  );
+  cookbooks.sort((a, b) => a.label.localeCompare(b.label));
+  return { ...article, cookbooks };
+};
+
+const tools = await Promise.all(
+  toolItems.map(async (t) => ({
+    ...t,
+    articles: await Promise.all(
+      articlesUnder(`tools/${slugify(t.title)}`).map(withCookbooks),
+    ),
+  })),
+);
+const workflows = workflowItems.map((w) => ({
+  ...w,
+  articles: articlesUnder(`workflows/${slugify(w.title)}`),
+}));
 ---
 
 <BaseLayout
@@ -69,28 +118,67 @@ const workflows = bySection("workflows");
             Tools
           </h2>
           {
-            tools.map((t) => {
-              const { Content } = t.rendered;
-              return (
-                <>
-                  <div class="tri-item">
-                    <h3>{t.data.title}</h3>
-                    <p set:html={glossary(t.data.teaser)} />
+            tools.map((t) => (
+              <>
+                <div class="tri-item">
+                  <h3>{t.title}</h3>
+                  <p set:html={glossary(t.teaser)} />
+                </div>
+                {t.articles.length > 0 ? (
+                  <div class="accordion-nested">
+                    {t.articles.map((article) => {
+                      const { Content } = article.rendered;
+                      return (
+                        <details
+                          class="accordion-item"
+                          name={`tools-${slugify(t.title)}-accordion`}
+                        >
+                          <summary>
+                            <span>{article.data.title}</span>
+                            <span class="chevron" aria-hidden="true">
+                              &rsaquo;
+                            </span>
+                          </summary>
+                          <div class="accordion-body glossary-body">
+                            <Content />
+                            {article.cookbooks.length > 0 && (
+                              <div class="accordion-nested">
+                                {article.cookbooks.map((cookbook) => {
+                                  const { Content: CookbookContent } =
+                                    cookbook.rendered;
+                                  return (
+                                    <details
+                                      class="accordion-item accordion-item--article"
+                                      name={`tools-${slugify(t.title)}-${slugify(article.data.title)}-cookbook`}
+                                    >
+                                      <summary>
+                                        <span>{cookbook.label}</span>
+                                        <span
+                                          class="chevron"
+                                          aria-hidden="true"
+                                        >
+                                          &rsaquo;
+                                        </span>
+                                      </summary>
+                                      <div class="accordion-body glossary-body">
+                                        <p>{cookbook.entry.data.summary}</p>
+                                        <CookbookContent />
+                                      </div>
+                                    </details>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        </details>
+                      );
+                    })}
                   </div>
-                  <details class="accordion-item" name="tools-accordion">
-                    <summary>
-                      <span>Details</span>
-                      <span class="chevron" aria-hidden="true">
-                        &rsaquo;
-                      </span>
-                    </summary>
-                    <div class="accordion-body glossary-body">
-                      <Content />
-                    </div>
-                  </details>
-                </>
-              );
-            })
+                ) : (
+                  <div class="tri-slot-empty" />
+                )}
+              </>
+            ))
           }
         </div>
       </div>
@@ -103,28 +191,39 @@ const workflows = bySection("workflows");
             Workflows
           </h2>
           {
-            workflows.map((w) => {
-              const { Content } = w.rendered;
-              return (
-                <>
-                  <div class="tri-item">
-                    <h3>{w.data.title}</h3>
-                    <p set:html={glossary(w.data.teaser)} />
+            workflows.map((w) => (
+              <>
+                <div class="tri-item">
+                  <h3>{w.title}</h3>
+                  <p set:html={glossary(w.teaser)} />
+                </div>
+                {w.articles.length > 0 ? (
+                  <div class="accordion-nested">
+                    {w.articles.map((article) => {
+                      const { Content } = article.rendered;
+                      return (
+                        <details
+                          class="accordion-item"
+                          name={`workflows-${slugify(w.title)}-accordion`}
+                        >
+                          <summary>
+                            <span>{article.data.title}</span>
+                            <span class="chevron" aria-hidden="true">
+                              &rsaquo;
+                            </span>
+                          </summary>
+                          <div class="accordion-body glossary-body">
+                            <Content />
+                          </div>
+                        </details>
+                      );
+                    })}
                   </div>
-                  <details class="accordion-item" name="workflows-accordion">
-                    <summary>
-                      <span>Details</span>
-                      <span class="chevron" aria-hidden="true">
-                        &rsaquo;
-                      </span>
-                    </summary>
-                    <div class="accordion-body glossary-body">
-                      <Content />
-                    </div>
-                  </details>
-                </>
-              );
-            })
+                ) : (
+                  <div class="tri-slot-empty" />
+                )}
+              </>
+            ))
           }
         </div>
       </div>
@@ -163,7 +262,11 @@ const workflows = bySection("workflows");
                           const entry = item.glossaryId
                             ? glossaryById.get(item.glossaryId)
                             : undefined;
-                          return entry ? (
+                          const leafArticles = articlesUnder(
+                            `stack/${slugify(cat.label)}/${slugify(group.label)}/${slugify(item.label)}`,
+                          );
+                          const expandable = entry || leafArticles.length > 0;
+                          return expandable ? (
                             <details
                               class="accordion-item accordion-item--leaf"
                               name={`stack-leaves-${slugify(cat.label)}-${slugify(group.label)}`}
@@ -175,10 +278,40 @@ const workflows = bySection("workflows");
                                 </span>
                               </summary>
                               <div class="accordion-body glossary-body">
-                                <p>{entry.data.summary}</p>
-                                <a href={`/glossary/${entry.id}/`}>
-                                  Open full page &rarr;
-                                </a>
+                                {entry && (
+                                  <>
+                                    <p>{entry.data.summary}</p>
+                                    <a href={`/glossary/${entry.id}/`}>
+                                      Open full page &rarr;
+                                    </a>
+                                  </>
+                                )}
+                                {leafArticles.length > 0 && (
+                                  <div class="accordion-nested">
+                                    {leafArticles.map((article) => {
+                                      const { Content } = article.rendered;
+                                      return (
+                                        <details
+                                          class="accordion-item accordion-item--article"
+                                          name={`stack-articles-${slugify(cat.label)}-${slugify(group.label)}-${slugify(item.label)}`}
+                                        >
+                                          <summary>
+                                            <span>{article.data.title}</span>
+                                            <span
+                                              class="chevron"
+                                              aria-hidden="true"
+                                            >
+                                              &rsaquo;
+                                            </span>
+                                          </summary>
+                                          <div class="accordion-body glossary-body">
+                                            <Content />
+                                          </div>
+                                        </details>
+                                      );
+                                    })}
+                                  </div>
+                                )}
                               </div>
                             </details>
                           ) : (
@@ -398,6 +531,23 @@ const workflows = bySection("workflows");
     gap: 0.6rem;
   }
 
+  /* An accordion-nested list living inside another accordion's own body
+     (a leaf's glossary blurb followed by its sub-articles) isn't a grid
+     item there - grid-column is simply inert - but it does need a bit of
+     breathing room from whatever's above it. */
+  .accordion-body .accordion-nested {
+    margin-top: 0.75rem;
+  }
+
+  /* Column 3 for a Tools/Workflows row with no sub-articles yet: an empty,
+     invisible placeholder rather than a fake "Details" button over
+     content that doesn't exist - it only exists to keep this row's grid
+     placement (tri-item in column 2, this in column 3) correct for the
+     rows that follow it. */
+  .tri-slot-empty {
+    grid-column: 3;
+  }
+
   .accordion-item summary {
     display: flex;
     align-items: center;
@@ -453,6 +603,23 @@ const workflows = bySection("workflows");
 
   .accordion-item--leaf .accordion-body p {
     margin: 0 0 0.5em;
+  }
+
+  /* one tier deeper still: a leaf's own sub-articles ("why Podman over
+     Docker"), muted one step further again */
+  .accordion-item--article {
+    background: var(--bg-inset);
+  }
+
+  .accordion-item--article summary {
+    padding: 0.55rem 0.85rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  .accordion-item--article .accordion-body {
+    padding: 0 0.85rem 0.75rem;
+    font-size: 0.9rem;
   }
 
   .stack-leaf-plain {

@@ -6,9 +6,13 @@
  *
  * A leaf's `glossaryId`, when set, must match a real entry id under
  * site/src/content/glossary/ - tech-stack.astro looks it up and reuses that
- * page's summary + link as the leaf's expanded content rather than
- * duplicating it here. Leaves without one render as plain, non-expandable
- * labels until they either get a glossary page or their own content.
+ * page's summary + link as part of the leaf's expanded content rather than
+ * duplicating it here. A leaf can also have its own narrative sub-articles
+ * (site/src/content/articles/stack/<category>/<group>/<leaf>/*.md, matched
+ * by path in tech-stack.astro) nested one tier deeper for "why this over
+ * that" content the glossary summary doesn't cover. A leaf with neither
+ * renders as a plain, non-expandable label - no faking an accordion over
+ * content that doesn't exist yet.
  *
  * Groupings and category descriptions are a first draft, reorganizing the
  * words already on this page rather than new copy - names, placement, and

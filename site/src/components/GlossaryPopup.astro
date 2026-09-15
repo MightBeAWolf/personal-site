@@ -139,6 +139,7 @@ const { terms } = Astro.props;
     offset,
     size,
   } from "@floating-ui/dom";
+  import { initCodeCopy } from "../lib/code-copy";
 
   const GRACE_MS = 150;
   const CHARGE_MS = 550;
@@ -215,7 +216,10 @@ const { terms } = Astro.props;
 
     function renderContent(card: HTMLElement, html: string) {
       const body = card.querySelector<HTMLElement>(".glossary-popup__body");
-      if (body) body.innerHTML = html;
+      if (body) {
+        body.innerHTML = html;
+        initCodeCopy(body);
+      }
     }
 
     function renderError(card: HTMLElement) {

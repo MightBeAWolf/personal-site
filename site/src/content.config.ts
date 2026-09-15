@@ -19,20 +19,22 @@ const glossary = defineCollection({
   }),
 });
 
-// The expanded accordion body for each Tools/Workflows row on /tech-stack.
-// `teaser` is the one-liner shown in column 2; the markdown body is the
-// prose that appears in column 3's accordion once it's expanded,
-// cross-referencing glossary terms with the same hand-authored
-// `<button class="glossary-term" ...>` pattern used in
-// src/content/glossary/*.md.
-const practices = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/practices" }),
+// Narrative sub-articles for /tech-stack's column 3 - "why Podman over
+// Docker", "why I edit in a terminal most of the time", not definitions
+// (that's the glossary's job). A file's own path ties it to its parent:
+//   tools/<item-slug>/<article-slug>.md
+//   workflows/<item-slug>/<article-slug>.md
+//   stack/<category-slug>/<group-slug>/<leaf-slug>/<article-slug>.md
+// tech-stack.astro matches an article to its parent by checking whether
+// its id starts with the parent's own slugify()'d key + "/" - no
+// frontmatter field names the parent, so there's nothing to drift out of
+// sync when an item gets renamed, only the folder it lives in.
+const articles = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/articles" }),
   schema: z.object({
-    section: z.enum(["tools", "workflows"]),
     title: z.string(),
-    teaser: z.string(),
-    order: z.number(),
+    order: z.number().optional(),
   }),
 });
 
-export const collections = { glossary, practices };
+export const collections = { glossary, articles };

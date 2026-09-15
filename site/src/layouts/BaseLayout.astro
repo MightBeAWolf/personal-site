@@ -72,6 +72,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
     </main>
     <Footer />
 
+    <script>
+      import { initCodeCopy } from "../lib/code-copy";
+      initCodeCopy(document);
+    </script>
+
     <style>
       .skip-link {
         position: absolute;
