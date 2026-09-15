@@ -37,6 +37,18 @@ jobs:
       - name: Run e2e test suite
         run: mise run test:e2e
 
+      # test:e2e's Playwright container writes site/node_modules on the
+      # host via --userns keep-id:uid=1000,gid=1000 (mise.toml), so those
+      # files end up owned by uid 1000 - fine on the maintainer's own box
+      # (that's their real uid), but not the runner user here. The next
+      # step's plain (non-containerized) `npm ci` in the `setup` task can't
+      # write into that now-foreign-owned directory. It isn't needed for
+      # the image itself (excluded via .containerignore; the Containerfile
+      # installs its own deps), so just clear it rather than chown it.
+      - name: Reset site/node_modules before the host build
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: rm -rf site/node_modules
+
       # GHCR requires a lowercase repo path; github.repository preserves the
       # original owner/repo casing. IMAGE_NAME comes from mise.toml's own
       # env (derived from the checkout dir's basename, not a fixed string),
