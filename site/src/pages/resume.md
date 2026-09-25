@@ -21,7 +21,7 @@ Greater Seattle Area · 801-746-9685 ·
 
 ## Summary
 
-Software and infrastructure architect with 10+ years building high-availability
+Software and infrastructure architect with 12+ years building high-availability
 AI infrastructure and scalable software systems from the ground up. Deep
 expertise in AI infrastructure: RAG (Retrieval-Augmented Generation)
 pipelines, autonomous agents, MCP (Model Context Protocol) tool integration,
@@ -55,7 +55,7 @@ holding to strict NIST 800-171 / CMMC 2.0 compliance.
     / public-key infrastructure (PKI), cert-manager, Certbot / Let's Encrypt,
     1Password secrets injection
 - **Data & Storage:** PostgreSQL, CloudNativePG, Redis, SeaweedFS distributed
-    storage, Gitea, N8N
+    storage, Gitea, N8N, Synology High Availability, S3 buckets, NFS servers
 - **Security & Compliance:** NIST 800-171, CMMC 2.0 (Levels 2–3), risk analysis,
     incident response, Kubernetes hardening (Pod Security Admission, audit
     policy, etcd encryption at rest), fail2ban, firewalld / UFW, WireGuard
@@ -90,7 +90,7 @@ Midvale, UT · July 2014 to May 2026
 
 *Analog integrated-circuit design software for DoD/DoE and commercial workflows.*
 
-Third employee, joined as a fresh coder and grew into the architect and
+Third employee; grew from individual contributor into the architect and
 leadership role as the company scaled, owning company-wide development
 operations across both software and hardware design.
 
