@@ -35,7 +35,7 @@ jobs:
       # Builds the site and runs the full Playwright suite - the gate
       # everything below is conditioned on passing.
       - name: Run checks/test suite
-        run: mise run checks
+        run: mise run check
 
       # test:e2e's Playwright container writes site/node_modules on the
       # host via --userns keep-id:uid=1000,gid=1000 (mise.toml), so those

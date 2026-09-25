@@ -141,6 +141,7 @@ run = 'podman run --rm -ti --entrypoint bash localhost/${IMAGE_NAME:?}:${MODE:?}
 
 [tasks.check]
 description = "Runs the projects tests and checks"
+alias = 'checks'
 run = ['typos', 'mise run "test:*"']
 
 [tasks."test:e2e"]
