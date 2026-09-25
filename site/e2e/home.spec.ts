@@ -8,8 +8,8 @@ test("hero CTAs link to the résumé and an email", async ({ page }) => {
   const ctas = page.locator(".hero__actions a");
   await expect(ctas).toHaveCount(3);
   await expect(ctas.nth(0)).toHaveAttribute("href", /^mailto:/);
-  await expect(ctas.nth(1)).toHaveAttribute("href", "/resume");
-  await expect(ctas.nth(2)).toHaveAttribute("href", "/tech-stack");
+  await expect(ctas.nth(1)).toHaveAttribute("href", "/resume/");
+  await expect(ctas.nth(2)).toHaveAttribute("href", "/tech-stack/");
 });
 
 test("every focus card has a non-empty heading", async ({ page }) => {
@@ -28,8 +28,8 @@ test('"Elsewhere" list links to the résumé, tech-stack page, and external prof
     .locator(".link-row")
     .evaluateAll((els) => els.map((el) => el.getAttribute("href")));
 
-  expect(hrefs).toContain("/resume");
-  expect(hrefs).toContain("/tech-stack");
+  expect(hrefs).toContain("/resume/");
+  expect(hrefs).toContain("/tech-stack/");
   expect(hrefs.some((h) => h?.includes("github.com"))).toBe(true);
   expect(hrefs.some((h) => h?.includes("linkedin.com"))).toBe(true);
   expect(hrefs.some((h) => h?.startsWith("mailto:"))).toBe(true);
