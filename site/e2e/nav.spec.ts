@@ -7,6 +7,7 @@ const routes: { path: string; navLabel: string }[] = [
   { path: "/", navLabel: "Home" },
   { path: "/resume", navLabel: "Résumé" },
   { path: "/tech-stack", navLabel: "Tech Stack" },
+  { path: "/blog", navLabel: "Blog" },
 ];
 
 for (const { path, navLabel } of routes) {

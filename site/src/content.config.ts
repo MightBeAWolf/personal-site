@@ -37,4 +37,19 @@ const articles = defineCollection({
   }),
 });
 
-export const collections = { glossary, articles };
+// Blog posts, one file per post, filename slug is the route
+// (/blog/<slug>). Listed on the homepage's "Blog" section (3 latest) and
+// in full at /blog/ (site/src/pages/blog/index.astro), each rendering via
+// the shared site/src/components/BlogPostCard.astro preview; full post at
+// /blog/<slug> (site/src/pages/blog/[slug].astro), following the same
+// collection -> index -> detail shape as `glossary`.
+const blog = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+  }),
+});
+
+export const collections = { glossary, articles, blog };

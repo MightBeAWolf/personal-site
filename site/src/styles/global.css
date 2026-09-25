@@ -337,6 +337,26 @@ pre > code {
   font-weight: 650;
 }
 
+.glossary-body table {
+  width: 100%;
+  max-width: 60ch;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.95em;
+}
+
+.glossary-body th,
+.glossary-body td {
+  text-align: left;
+  padding: 0.55em 0.75em;
+  border-bottom: 1px solid var(--border);
+}
+
+.glossary-body th {
+  color: var(--heading);
+  font-weight: 600;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

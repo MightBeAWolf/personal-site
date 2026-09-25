@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { openThemePicker } from "./helpers";
 
-const pages = ["/", "/resume", "/tech-stack"];
+const pages = ["/", "/resume", "/tech-stack", "/blog"];
 
 test.describe("no horizontal overflow at mobile width", () => {
   test.use({ viewport: { width: 375, height: 812 } });

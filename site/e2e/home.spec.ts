@@ -21,7 +21,7 @@ test("every focus card has a non-empty heading", async ({ page }) => {
   }
 });
 
-test('"Elsewhere" list links to the résumé, tech-stack page, and external profiles', async ({
+test('"Elsewhere" list links to the résumé, tech-stack, blog, and external profiles', async ({
   page,
 }) => {
   const hrefs = await page
@@ -30,7 +30,19 @@ test('"Elsewhere" list links to the résumé, tech-stack page, and external prof
 
   expect(hrefs).toContain("/resume/");
   expect(hrefs).toContain("/tech-stack/");
+  expect(hrefs).toContain("/blog/");
   expect(hrefs.some((h) => h?.includes("github.com"))).toBe(true);
   expect(hrefs.some((h) => h?.includes("linkedin.com"))).toBe(true);
   expect(hrefs.some((h) => h?.startsWith("mailto:"))).toBe(true);
+});
+
+test('"Blog" section previews the latest post and links to the full directory', async ({
+  page,
+}) => {
+  const preview = page.locator('a.post-card[href="/blog/system-1-ai/"]');
+  await expect(preview).toBeVisible();
+  await expect(preview.locator(".post-card__title")).not.toBeEmpty();
+
+  const seeMore = page.getByRole("link", { name: "See more" });
+  await expect(seeMore).toHaveAttribute("href", "/blog/");
 });

@@ -5,7 +5,7 @@ summary: My baseline for a python environment in mise-en-place
 
 ```toml
 [tools]
-# Statically define the python verson.
+# Statically define the python version.
 python = "3.13"
 # The language-server configured for Python in my Helix Editor config.
 ruff = "latest"

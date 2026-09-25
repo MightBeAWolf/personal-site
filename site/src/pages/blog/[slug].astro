@@ -1,0 +1,110 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("blog");
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const formattedDate = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "long",
+}).format(entry.data.date);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description}>
+  <article class="page">
+    <header class="page-head">
+      <div class="wrap col page-head__inner">
+        <a class="page-back" href="/blog/">&larr; Blog</a>
+        <h1>{entry.data.title}</h1>
+        <p class="lede">{entry.data.description}</p>
+        <p class="published">
+          Published <time datetime={entry.data.date.toISOString()}>{formattedDate}</time>
+        </p>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="wrap col">
+        {/*
+          Reuses the shared global .glossary-body prose typography (see
+          site/src/styles/global.css) - already the general "rendered
+          markdown body" style used outside the glossary itself (e.g.
+          tech-stack.astro's accordion bodies), not glossary-specific.
+        */}
+        <div class="glossary-body">
+          <Content />
+        </div>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .col {
+    max-width: 60rem;
+  }
+
+  /* Wider than the shared .glossary-body default (60ch, tuned for the
+     glossary/tech-stack use cases). .page and .glossary-body stay scoped
+     (Astro only stamps its data-astro-cid-* attribute on elements this
+     component renders directly, so those two - written right in this
+     template - correctly tie the rule to this page and can't leak into
+     glossary/[slug].astro's identically-named pairing elsewhere). The
+     :where(...) part has to be :global() though: it targets h1/p/table
+     etc. as rendered by <Content />, a *child* component, and scoped
+     styles never reach into a child component's own output - the scope
+     attribute would never land on those elements, so the rule would
+     silently match nothing without this. */
+  .page .glossary-body :global(:where(h1, h2, h3, p, ul, ol)) {
+    max-width: 75ch;
+  }
+
+  .page .glossary-body :global(table) {
+    max-width: 100%;
+  }
+
+  .page-head__inner {
+    padding-block: clamp(2rem, 6vw, 4rem) 0;
+  }
+
+  .page-back {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .page-back:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 1.4rem + 1.6vw, 2.4rem);
+    margin: 0.6em 0 0.3em;
+  }
+
+  .lede {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    margin: 0 0 0.75rem;
+    max-width: 55ch;
+  }
+
+  .published {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-faint);
+  }
+
+  .section {
+    padding-block: clamp(1rem, 4vw, 2rem) clamp(2.5rem, 6vw, 4rem);
+  }
+</style>

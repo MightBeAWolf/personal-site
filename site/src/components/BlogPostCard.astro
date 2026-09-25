@@ -1,0 +1,58 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"blog">;
+}
+
+const { entry } = Astro.props;
+const formattedDate = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "long",
+}).format(entry.data.date);
+---
+
+<a class="post-card" href={`/blog/${entry.id}/`}>
+  <p class="post-card__date">
+    <time datetime={entry.data.date.toISOString()}>{formattedDate}</time>
+  </p>
+  <h3 class="post-card__title">{entry.data.title}</h3>
+  <p class="post-card__body">{entry.data.description}</p>
+</a>
+
+<style>
+  .post-card {
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    background: var(--bg-raised);
+    color: var(--text);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .post-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+
+  .post-card__date {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    color: var(--text-faint);
+  }
+
+  .post-card__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+    color: var(--heading);
+  }
+
+  .post-card__body {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+</style>

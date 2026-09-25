@@ -2,13 +2,20 @@
 import ThemePicker from "./ThemePicker.astro";
 
 const { pathname } = Astro.url;
+// href carries a trailing slash (e.g. "/resume/"); pathname doesn't always -
+// trailingSlash is "ignore" in astro.config.mjs, so a request for the
+// bare "/resume" (as happens in dev, where there's no nginx in front to
+// redirect it) reports pathname "/resume" with nothing appended.
 const isActive = (href: string) =>
-  href === "/" ? pathname === "/" : pathname.startsWith(href);
+  href === "/"
+    ? pathname === "/"
+    : (pathname.endsWith("/") ? pathname : `${pathname}/`).startsWith(href);
 
 const links = [
   { href: "/", label: "Home" },
   { href: "/resume/", label: "Résumé" },
   { href: "/tech-stack/", label: "Tech Stack" },
+  { href: "/blog/", label: "Blog" },
 ];
 ---
 

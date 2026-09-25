@@ -1,5 +1,11 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import BlogPostCard from "../components/BlogPostCard.astro";
+
+const latestPosts = (await getCollection("blog"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
 
 const focus = [
   {
@@ -42,6 +48,7 @@ const elsewhere = [
     label: "Tech stack",
     note: "Tools, workflows, and what I build with",
   },
+  { href: "/blog/", label: "Blog", note: "Posts and write-ups" },
 ];
 ---
 
@@ -126,6 +133,22 @@ const elsewhere = [
               ))
             }
           </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="bi-grid">
+        <h2 class="bi-label">Blog</h2>
+        <div class="bi-content">
+          <ul class="post-previews">
+            {latestPosts.map((post) => <li><BlogPostCard entry={post} /></li>)}
+          </ul>
+          <div class="blog-actions">
+            <a class="button" href="/blog/">See more</a>
+          </div>
         </div>
       </div>
     </div>
@@ -334,5 +357,24 @@ const elsewhere = [
   .link-row__label,
   .link-row:hover {
     transition: padding 0.15s ease, color 0.15s ease;
+  }
+
+  .post-previews {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (max-width: 60rem) {
+    .post-previews {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .blog-actions {
+    display: flex;
   }
 </style>
