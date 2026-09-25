@@ -64,7 +64,7 @@ export const workflows: PracticeItem[] = [
   {
     title: "Observability first",
     teaser:
-      "Grafana, Loki, and Prometheus (with Grafana Alloy) go in early, not after something breaks; Gatus and ntfy cover health and alerting. Umami to understand how vistors interact with my sites..",
+      "Grafana, Loki, and Prometheus (with Grafana Alloy) go in early, not after something breaks; Gatus and ntfy cover health and alerting. Umami to understand how visitors interact with my sites.",
   },
   {
     title: "Compliance as a constraint",

@@ -1,0 +1,35 @@
+[files]
+extend-exclude = []
+ignore-hidden = true
+ignore-files = true
+ignore-dot = true
+ignore-vcs = true
+ignore-global = true
+ignore-parent = true
+
+[default]
+binary = false
+check-filename = true
+check-file = true
+unicode = true
+locale = "en"
+extend-ignore-re = []
+extend-ignore-identifiers-re = []
+extend-ignore-words-re = []
+
+[default.extend-words]
+# <typo> = "<correction>"
+
+[default.extend-identifiers]
+# <typo> = "<correction>"
+# "SSHed" (past-tense verb form of SSH) gets split as an identifier-shaped
+# token ("SS" + "Hed") and "Hed" alone matches typos' dictionary correction
+# to "Head" - false positive, not an actual misspelling. extend-words
+# doesn't help here since the split happens before that check; registering
+# it as a known identifier skips the split entirely.
+SSHed = "SSHed"
+# "Darcula" is JetBrains' actual theme name (a portmanteau of "dark" and
+# "Dracula"), distinct from the separate "Dracula" theme also present in
+# helix-themes.json/.css - not a misspelling to correct.
+darcula = "darcula"
+Darcula = "Darcula"

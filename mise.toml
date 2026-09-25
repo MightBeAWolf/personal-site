@@ -16,6 +16,7 @@ node = "v26"
 hadolint = "latest"
 "npm:@astrojs/language-server" = "latest"
 uv = "latest"
+typos = "latest"
 
 # [tasks."fnox:sync"]
 # description = "Syncs secrets from 1Password to age"
@@ -137,6 +138,10 @@ alias = 'shell'
 depends = ['podman:build']
 interactive = true
 run = 'podman run --rm -ti --entrypoint bash localhost/${IMAGE_NAME:?}:${MODE:?}'
+
+[tasks.check]
+description = "Runs the projects tests and checks"
+run = ['typos', 'mise run "test:*"']
 
 [tasks."test:e2e"]
 description = "Runs the Playwright e2e suite in a container against a production build"
